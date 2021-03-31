@@ -1,4 +1,4 @@
-var hostName='markchen7788.xyz'
+var hostName= 'markchen7788.xyz'
 function getQueryVariable(variable)
 {
        var query = window.location.search.substring(1);  
