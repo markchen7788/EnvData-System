@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>商品</title>
+	<link rel="stylesheet" href="./layui/css/layui.css">
+</head>
+
+<body>
+	<script src="./layui/layui.js"></script>
+	<script>
+		var count = 0;
+		layui.use(['jquery', 'form','layer'], function () {
+
+			const $ = layui.jquery;
+			$("#addParameter").click(function () {
+				// addParameter();
+				layer.open({
+							type: 2,
+							area: ['1000px', '620px'],
+							content: './checkBox.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+						});
+				return false;
+			});
+
+		});
+		function deleteParameter(id) {
+			layui.use(['jquery', 'form'], function () {
+				const $ = layui.jquery;
+				var form = layui.form;
+				var formData = form.val("formTest");
+				$('#param_' + id.toString()).remove();
+				form.val("formTest", formData)
+			})
+		};
+		function addParameter() {
+			layui.use(['jquery', 'form'], function () {
+				var form = layui.form;
+				var formData = form.val("formTest");
+				const $ = layui.jquery;
+				count++;
+				var id = "param_" + count.toString();
+				$("#parameterForm").html(
+					$("#parameterForm").html() + "<div class='layui-form-item' id=" + id + "><div class='layui-inline'><label class='layui-form-label'>参数名</label>" +
+					"<div class='layui-input-inline' style='width: 100px;'><input type='text' name='parameterName" + count + "' autocomplete='off' class='layui-input'></div>" +
+					"<label class='layui-form-label'>单位</label><div class='layui-input-inline' style='width: 110px;'>" +
+					"<input type='text' name='parameterUnit" + count + "' autocomplete='off' class='layui-input'></div>" +
+					"<a href='javascript:deleteParameter(" + count + ")'><i class='layui-icon layui-icon-delete' style='font-size: 35px;'></i></a></div></div>"
+				);
+				form.val("formTest", formData)
+			});
+		}
+	</script>
+	<b>
+
+		<script id="demo" type="text/html">
+			{{# 
+				for(var i in d.count){ var ii=d.count }}
+
+			<div class="layui-form-item" id="param_{{ii}}">
+				<div class="layui-inline">
+
+					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>参数名</b></label>
+					<div class="layui-input-inline" style="width: 10%;">
+						<input type="text" name="parameterName{{ii}}" autocomplete="off" class="layui-input"
+							style="border: 0ch;">
+					</div>
+					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>单位</b></label>
+					<div class="layui-input-inline" style="width: 10%;">
+						<input type="text" name="parameterUnit{{ii}}" autocomplete="off" class="layui-input"
+							style="border: 0ch;">
+					</div>
+					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>数据类型</b></label>
+					<div class="layui-input-inline" style="width: 10%;border: 0ch;">
+						<select name="parameterType{{ii}}" lay-verify="">
+							<option value="float" selected>小数</option>
+							<option value="int">整数</option>
+							<option value="str">字符</option>
+						</select>
+					</div>
+					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>备注</b></label>
+					<div class="layui-input-inline" style="width: 10%;">
+						<input type="text" name="parameterMemo{{ii}}" autocomplete="off" class="layui-input"
+							style="border: 0ch;">
+					</div>
+					<a style="width: 10%;" onclick="deleteParameter({{ii}})"><i
+							class="layui-icon layui-icon-delete"
+							style="font-size: 35px;color: #ffffff;"></i></a>
+				</div>
+			</div>
+			{{# } }}
+		</script>
+
+
+		<form class="layui-form layui-form-pane" lay-filter="formTest" action="">
+			<fieldset class="layui-elem-field">
+				<legend style="color:#ffffff;"><b>表格基本信息</b></legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item ">
+						<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>表名</b></label>
+						<div class="layui-input-block">
+							<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入表名"
+								class="layui-input" style="border: 0ch;">
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-text">
+						<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>表格备注信息</b></label>
+						<div class="layui-input-block">
+							<textarea placeholder="请输入表格备注信息" class="layui-textarea" style="border: 0ch;"></textarea>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="layui-elem-field">
+				<legend style="color:#ffffff;"><b>表格字段信息</b></legend>
+				<div class="layui-field-box">
+
+					<div class="layui-form-item" pane>
+
+						<input type="checkbox" name="" title="时间" checked>
+						<input type="checkbox" name="" title="地区">
+						<input type="checkbox" name="" title="区站号">
+						<button class="layui-btn layui-btn-sm layui-bg-red" id="_addParameter">手动添加新数据项</button>
+						<button class="layui-btn layui-btn-sm layui-bg-red" id="addParameter">从库中选择添加数据项</button>
+
+					</div>
+
+					<div id='parameterForm'>
+						<div class="layui-form-item" id="param_0">
+							<div class="layui-inline">
+
+								<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>参数名</b></label>
+								<div class="layui-input-inline" style="width: 10%;">
+									<input type="text" name="parameterName0" autocomplete="off" class="layui-input"
+										style="border: 0ch;">
+								</div>
+								<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>单位</b></label>
+								<div class="layui-input-inline" style="width: 10%;">
+									<input type="text" name="parameterUnit0" autocomplete="off" class="layui-input"
+										style="border: 0ch;">
+								</div>
+								<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>数据类型</b></label>
+								<div class="layui-input-inline" style="width: 10%;border: 0ch;">
+									<select name="city" lay-verify="">
+										<option value="float" selected>小数</option>
+										<option value="int">整数</option>
+										<option value="str">字符</option>
+									</select>
+								</div>
+								<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>备注</b></label>
+								<div class="layui-input-inline" style="width: 10%;">
+									<input type="text" name="parameterMemo0" autocomplete="off" class="layui-input"
+										style="border: 0ch;">
+								</div>
+								<a style="width: 10%;" onclick="deleteParameter(0)"><i
+										class="layui-icon layui-icon-delete"
+										style="font-size: 35px;color: #ffffff;"></i></a>
+							</div>
+						</div>
+					</div>
+					<div id="view"></div>
+
+				</div>
+			</fieldset>
+			<div class="layui-form-item">
+				<button class="layui-btn layui-bg-red" lay-submit="confirm" lay-filter="confirm">保存</button>
+				<button class="layui-btn layui-bg-red" lay-submit="confirm" lay-filter="confirm">另存</button>
+			</div>
+		</form>
+	</b>
+
+<script type="text/html" id="sselect">
+<form class="layui-form" action="">
+<input type="checkbox" name="fff" value="发呆"  title="发呆">
+<input type="checkbox" name="ddd" value="发呆" title="发呆" >
+<input type="checkbox" name="fff" title="发呆" >
+<input type="checkbox" name="fff" title="发呆" >
+</form>
+</script>
+</body>
+<script>
+	layui.use(['jquery', 'form', 'laytpl'], function () {
+		const $ = layui.jquery;
+		var laytpl = layui.laytpl;
+
+		var data = { //数据
+			count: 1
+		}
+		var getTpl = demo.innerHTML
+			, view = document.getElementById('view');
+		laytpl(getTpl).render(data, function (html) {
+			view.innerHTML = html;
+		});
+
+		$("#_addParameter").click(function () {
+			_addParameter();
+			return false;
+		});
+		var dd = 2;
+		function _addParameter() {
+			var form = layui.form;
+			var formData = form.val("formTest");
+			layer.alert(JSON.stringify(formData));
+			const $ = layui.jquery;
+			var data = { //数据
+				count: [dd]
+			}
+			dd = dd + 1;
+			var getTpl = demo.innerHTML
+				, view = document.getElementById('view');
+			laytpl(getTpl).render(data, function (html) {
+				$("#parameterForm").html(
+					$("#parameterForm").html() + html
+				);
+			});
+
+			form.val("formTest", formData)
+		}
+
+		$("#confirm").click(function () {
+			var form = layui.form;
+			alert("sss");
+			var data1 = form.val("formTest");
+			console.log(data1);
+
+
+
+		});
+
+
+	});
+</Script>
+
+</html>

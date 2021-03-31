@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <title>可动态扩展的环境监测数据管理系统</title>
+  <link rel="stylesheet" href="./layui/css/layui.css">
+  <style>
+    .my-background{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-image: url("./index_bg.jpg");
+    opacity: 0.7 ;
+}
+  </style>
+</head>
+
+<body class="my-background" >
+  <script src="./layui/layui.js"></script>
+  <div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header ">
+      <div class="layui-logo"><a href="index.html" ><font color="#009688">EnvData System</font></a></div>
+      <!-- 头部区域（可配合layui已有的水平导航） -->
+      <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+          <a href="javascript:;">
+            <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+            Admin
+          </a>
+          <dl class="layui-nav-child">
+            <dd><a href="">基本资料</a></dd>
+            <dd><a href="">安全设置</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"><a href="">退出系统</a></li>
+      </ul>
+    </div>
+  </div>
+  <br><br> <br><br>
+  <div align="center">
+    <font size=15 color="#FF5722">EnvData环境监测数据管理系统</font>
+  </div> <br><br> <br><br> <br><br>
+  <br><br> <br><br>
+  <div class="layui-row layui-col-space30">
+    <div class="layui-col-md3 layui-col-md-offset3">
+      <a href="./tableManager.html">
+        <div class="layui-card layui-bg-orange">
+          <div class="layui-card-body" align="center">
+            <br>
+            报表管理
+            <br><br>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="layui-col-md3 ">
+      <a href="./fileManager.html">
+        <div class="layui-card layui-bg-orange">
+          <div class="layui-card-body" align="center">
+            <br>
+            文件管理
+            <br><br>
+          </div>
+        </div>
+    </div>
+    </a>
+  </div>
+  <script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+      var element = layui.element;
+
+    });
+  </script>
+</body>
+
+</html>
