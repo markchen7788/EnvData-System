@@ -1,4 +1,4 @@
-var hostName= 'markchen7788.xyz'
+var hostName= 'markchen7788.xyz:8888'//'localhost:8888'
 function getQueryVariable(variable)
 {
        var query = window.location.search.substring(1);  
@@ -7,7 +7,7 @@ function getQueryVariable(variable)
                var pair = vars[i].split("=");
                if(pair[0] == variable){return decodeURI(pair[1]);}
        }
-       return(false);
+       return "";
 }
 function getParameter(variable,name)
 {
@@ -16,7 +16,7 @@ function getParameter(variable,name)
                var pair = vars[i].split("=");
                if(pair[0] == name){return decodeURI(pair[1]);}
        }
-       return(false);
+       return "";
 }
 function dateFormat(fmt, date) {
     let ret;

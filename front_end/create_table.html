@@ -9,6 +9,7 @@
 
 <body>
 	<script src="./layui/layui.js"></script>
+	<script src="./func.js"></script>
 	<script>
 		var count = 0;
 		layui.use(['jquery', 'form','layer'], function () {
@@ -76,7 +77,7 @@
 						<select name="parameterType{{ii}}" lay-verify="">
 							<option value="float" selected>小数</option>
 							<option value="int">整数</option>
-							<option value="str">字符</option>
+							<option value="varchar">字符</option>
 						</select>
 					</div>
 					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>备注</b></label>
@@ -100,14 +101,14 @@
 					<div class="layui-form-item ">
 						<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>表名</b></label>
 						<div class="layui-input-block">
-							<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入表名"
+							<input type="text" name="tableName" lay-verify="title" autocomplete="off" placeholder="请输入表名"
 								class="layui-input" style="border: 0ch;">
 						</div>
 					</div>
 					<div class="layui-form-item layui-form-text">
 						<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>表格备注信息</b></label>
 						<div class="layui-input-block">
-							<textarea placeholder="请输入表格备注信息" class="layui-textarea" style="border: 0ch;"></textarea>
+							<textarea placeholder="请输入表格备注信息" name="tableComment" class="layui-textarea" style="border: 0ch;"></textarea>
 						</div>
 					</div>
 				</div>
@@ -127,7 +128,7 @@
 					</div>
 
 					<div id='parameterForm'>
-						<div class="layui-form-item" id="param_0">
+						<div id="param_0"class="layui-form-item" id="param_0">
 							<div class="layui-inline">
 
 								<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>参数名</b></label>
@@ -183,25 +184,27 @@
 	layui.use(['jquery', 'form', 'laytpl'], function () {
 		const $ = layui.jquery;
 		var laytpl = layui.laytpl;
+		var form=layui.form;
 
-		var data = { //数据
-			count: 1
-		}
-		var getTpl = demo.innerHTML
-			, view = document.getElementById('view');
-		laytpl(getTpl).render(data, function (html) {
-			view.innerHTML = html;
-		});
+		// var data = { //数据
+		// 	count: 1
+		// }
+		// var getTpl = demo.innerHTML
+		// 	, view = document.getElementById('view');
+		
+		// 	laytpl(getTpl).render(data, function (html) {
+		// 	view.innerHTML = html;
+		// });
 
 		$("#_addParameter").click(function () {
 			_addParameter();
 			return false;
 		});
-		var dd = 2;
+		var dd = 1000;
 		function _addParameter() {
 			var form = layui.form;
 			var formData = form.val("formTest");
-			layer.alert(JSON.stringify(formData));
+			//layer.alert(JSON.stringify(formData));
 			const $ = layui.jquery;
 			var data = { //数据
 				count: [dd]
@@ -216,6 +219,10 @@
 			});
 
 			form.val("formTest", formData)
+		// 	form.val("formTest",{
+		// "tableName":'sssss',
+		// "tableComment" : 'sssss'
+		// 	});
 		}
 
 		$("#confirm").click(function () {
@@ -227,7 +234,32 @@
 
 
 		});
+	
+	
 
+		$.ajax({
+					url: 'http://'+hostName+'/test/getCreatTableInfo',
+					type: 'post',
+					data: {'Id':getQueryVariable('Id')},
+					success: function (res) {
+						console.log(res)
+						var data={"tableName":getParameter(res[0]["注释"],"tableName"),
+						"tableComment":getParameter(res[0]["注释"],"comment")};
+						for(var item in res)
+						{
+							data["parameterName"+dd]=res[item]["参数名"];
+							data["parameterUnit"+dd]=getParameter(res[item]["字段注释"],'unit');
+							data["parameterMemo"+dd]=getParameter(res[item]["字段注释"],'comment');
+							data["parameterType"+dd]=res[item]["数据类型"];
+							_addParameter();
+						}
+						$("#param_0").html("");
+
+						form.val("formTest",data);	
+
+						//data1 = res;
+					}
+					});
 
 	});
 </Script>
