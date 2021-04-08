@@ -4,17 +4,20 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>商品</title>
-	<link rel="stylesheet" href="./layui/css/layui.css">
+	<link rel="stylesheet" href="./res/layui/css/layui.css">
 </head>
-
+<script src="./res/layui/layui.js"></script>
+<script src="./js/data.js"></script>
+<script src="./js/func.js"></script>
+<script src="./js/checkBox.js"></script>
 <body>
-	<script src="./layui/layui.js"></script>
+	
 	<b>
-		<script src="./data.js"></script>
+		
 		<form class="layui-form" action="">
 			<div class="layui-row">
 				<div class="layui-col-md1">
-					<input type="text" name="title" required lay-verify="required" placeholder="查询" autocomplete="off"
+					<input type="text" name="condition"  placeholder="查询" autocomplete="off"
 						class="layui-input">
 				</div>
 				<div class="layui-col-md3 ">
@@ -28,53 +31,6 @@
 				  <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-fluid" lay-event="add">选好了，提交选项！</button>
 				</div>
 			  </script>
-		<script>
-			//注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
-
-			layui.use(['element', 'table', 'jquery'], function () {
-				var element = layui.element;
-				var table = layui.table;
-				const $ = layui.jquery;
-				var form = layui.form;
-				form.on('submit(formDemo)', function (data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					})
-					return false;
-				});
-
-				var data1 = data6
-				var col = [[{ type: 'checkbox', fixed: 'left' }]];
-				for (var key in data1[0]) {
-					var item = { field: key, title: key, sort: true }
-					col[0].push(item)
-				}
-
-				table.render({
-					elem: '#test'
-					, data: data1
-					, cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-					, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-					, defaultToolbar: ['filter', 'print', 'exports']
-					, cols: col
-					, page: true
-				});
-
-				table.on('toolbar(test)', function (obj) {
-					var checkStatus = table.checkStatus(obj.config.id);
-					switch (obj.event) {
-						case 'add':
-							var data = checkStatus.data;
-							layer.alert(JSON.stringify(data));
-							break;
-					};
-				});
-
-				//…
-			});
-		</script>
-
-
 </body>
 
 </html>

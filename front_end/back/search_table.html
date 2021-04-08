@@ -8,25 +8,21 @@
 </head>
 <script src="./res/layui/layui.js"></script>
 <script src="./js/func.js"></script>
-<style>
-	.layui-laypage-mark{
-		opacity: 0.8;
-	};
-</style>
-
+<script src="./js/search_table.js"></script>
 <body style="padding: 20px;">
-
-	<form class="layui-form" style="opacity: 0.8;" action="">
+	
+	<form class="layui-form" action="">
 		<div class="layui-row">
-			<div class="layui-col-md2 ">
+			<div class="layui-col-md1">
 				<input type="text" name="condition" placeholder="查询" autocomplete="off" class="layui-input">
 			</div>
 			<div class="layui-col-md3 ">
 				<button class="layui-btn " lay-submit lay-filter="formDemo">查询</button>
 			</div>
 		</div>
-	</form>
 
+
+	</form>
 	<br>
 	<div id="card">
 		<div class="layui-card">
@@ -45,14 +41,9 @@
 			</div>
 		</div>
 	</div>
-	<b><div id="test1" ></div></b>
-	<script src="./js/search_table .js"></script>
-	<script id="demo" type="text/html">
+<script id="demo" type="text/html">
 		{{# 
-			var start=(d["page"]-1)*d["limit"]+1;
-			var end=start+d["limit"]-1;
 			for(var i in d){ 
-				if(i=="limit"||i=="page"||d[i][3]<start||d[i][3]>end) continue;
 		}}
 		
 		<div class="layui-card">
@@ -65,7 +56,7 @@
 				
 				<span class="layui-badge layui-bg-green">{{d[i][2]}}</span>
 				<hr class="layui-border-orange">
-				{{# for(var j=4;j<d[i].length;j++){ }}
+				{{# for(var j=3;j<d[i].length;j++){ }}
 				<span class="layui-badge">{{d[i][j]}}</span>
 			{{#
 			 }
