@@ -24,11 +24,12 @@ layui.use(['element', 'table', 'jquery'], function () {
 
 
 			var col = [[{ type: 'checkbox', fixed: 'left' }]], edi = { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 };
-			for (var key in data1[0]) {
-				var item = { field: key, title: key, sort: true }
+			for (var key in data1[0]["col"]) {
+				var item = { field: data1[0]["col"][key]["参数名"], title: getParameter(data1[0]["col"][key]["字段注释"],"colName"), sort: true }
 				col[0].push(item)
 			}
 			col[0].push(edi)
+			data1.splice(0,1);
 
 			table.render({
 				elem: '#test'

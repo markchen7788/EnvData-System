@@ -46,7 +46,6 @@
 		</div>
 	</div>
 	<b><div id="test1" ></div></b>
-	<script src="./js/search_table .js"></script>
 	<script id="demo" type="text/html">
 		{{# 
 			var start=(d["page"]-1)*d["limit"]+1;
@@ -73,9 +72,12 @@
 			<hr class="layui-border-orange">
 			<b>
 			<a href="table.html?tableName={{i}}"><i class="layui-icon layui-icon-search"
-				style="font-size: 15px; color: #FF5722;">查看</i></a></h2>
+				style="color: #FF5722;">查看</i></a>
 		&nbsp;&nbsp;<a href="create_table.html?Id={{i}}"><i class="layui-icon layui-icon-edit"
-				style="font-size: 15px; color: #FF5722;">修改</i></a>&nbsp;&nbsp;&nbsp;</h2>
+				style="color: #FF5722;">修改</i></a>&nbsp;&nbsp;
+				<a href="javascript:deleteTable('{{i}}','{{d[i][0]}}')"><i class="layui-icon layui-icon-delete"
+					style="color: #FF5722;">删除</i></a>
+					
 		</b>
 			</div>
 		</div>
@@ -84,5 +86,5 @@
 	{{# } }}
 	</script>
 </body>
-
+<script src="./js/search_table .js"></script>
 </html>

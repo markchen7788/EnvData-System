@@ -8,6 +8,7 @@
 	<script src="./res/layui/layui.js"></script>
 	<script src="./js/func.js"></script>
 </head>
+
 <body style="padding: 20px;">
 	<b>
 		<script id="demo" type="text/html">
@@ -16,28 +17,29 @@
 
 			<div class="layui-form-item" id="param_{{ii}}">
 				<div class="layui-inline">
-
-					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>参数名</b></label>
+					<input type="text"  name="parameterId{{ii}}" autocomplete="off" class="layui-input layui-hide"
+							style="border: 0ch;">
+					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><span id="parameterName{{ii}}"></span>&nbsp;<b>参数名</b></label>
 					<div class="layui-input-inline" style="width: 10%;">
-						<input type="text" name="parameterName{{ii}}" autocomplete="off" class="layui-input"
+						<input type="text"  name="parameterName{{ii}}" onchange="onChange({{ii}},{{0}})" autocomplete="off" class="layui-input"
 							style="border: 0ch;">
 					</div>
-					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>单位</b></label>
+					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><span id="parameterUnit{{ii}}"></span>&nbsp;<b>单位</b></label>
 					<div class="layui-input-inline" style="width: 10%;">
-						<input type="text" name="parameterUnit{{ii}}" autocomplete="off" class="layui-input"
+						<input type="text"  name="parameterUnit{{ii}}" onchange="onChange({{ii}},{{1}})" autocomplete="off" class="layui-input"
 							style="border: 0ch;">
 					</div>
-					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>数据类型</b></label>
+					<label class="layui-form-label layui-bg-orange"  style="border: 0ch;"><span id="parameterType{{ii}}"></span>&nbsp;<b>数据类型</b></label>
 					<div class="layui-input-inline" style="width: 10%;border: 0ch;">
-						<select name="parameterType{{ii}}" lay-verify="">
-							<option value="float" selected>小数</option>
+						<select  name="parameterType{{ii}}" onclick="alert('ssss')" lay-filter="select" title="{{ii}}" lay-verify="">
+							<option value="double" selected>小数</option>
 							<option value="int">整数</option>
 							<option value="varchar">字符</option>
 						</select>
 					</div>
-					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>备注</b></label>
+					<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><span id="parameterMemo{{ii}}"></span>&nbsp;<b>备注</b></label>
 					<div class="layui-input-inline" style="width: 10%;">
-						<input type="text" name="parameterMemo{{ii}}" autocomplete="off" class="layui-input"
+						<input type="text"  name="parameterMemo{{ii}}"  onchange="onChange({{ii}},{{3}})" autocomplete="off" class="layui-input"
 							style="border: 0ch;">
 					</div>
 					<a style="width: 10%;" onclick="deleteParameter({{ii}})"><i
@@ -48,28 +50,29 @@
 			{{# } }}
 		</script>
 
-
 		<form class="layui-form layui-form-pane" lay-filter="formTest" action="">
 			<fieldset class="layui-elem-field">
 				<legend style="color:#ffffff;"><b>表格基本信息</b></legend>
 				<div class="layui-field-box">
 					<div class="layui-form-item ">
-						<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>表名</b></label>
+						<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><span id="tableName"></span>&nbsp;<b>表名</b></label>
 						<div class="layui-input-block">
-							<input type="text" name="tableName" lay-verify="title" autocomplete="off"
+							<input type="text" name="tableName" onchange="onChange(-1,4)" lay-verify="title" autocomplete="off"
 								placeholder="请输入表名" class="layui-input" style="border: 0ch;">
 						</div>
 					</div>
 					<div class="layui-form-item layui-form-text">
-						<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><b>表格备注信息</b></label>
+						<label class="layui-form-label layui-bg-orange" style="border: 0ch;"><span id="tableComment"></span>&nbsp;<b>表格备注信息</b></label>
 						<div class="layui-input-block">
-							<textarea placeholder="请输入表格备注信息" name="tableComment" class="layui-textarea"
+							<textarea placeholder="请输入表格备注信息" onchange="onChange(-1,5)" name="tableComment" class="layui-textarea"
 								style="border: 0ch;"></textarea>
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<button class="layui-btn" lay-submit="confirm" lay-filter="confirm">保存</button>
-						<button class="layui-btn" lay-submit="confirm" lay-filter="confirm">另存</button>
+
+						<button id="save" class="layui-btn" lay-submit lay-filter="formDemo">保存</button>
+						<button class="layui-btn" lay-submit lay-filter="_formDemo">新建</button>
+
 					</div>
 				</div>
 			</fieldset>
@@ -124,8 +127,19 @@
 
 				</div>
 			</fieldset>
+
 		</form>
 	</b>
 </body>
+<script>
+	//Demo
+	layui.use('form', function () {
+		var form = layui.form;
+
+		//监听提交
+
+	});
+</script>
 <script src="./js/create_table.js"></script>
+
 </html>
