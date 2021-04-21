@@ -15,7 +15,7 @@
 			{{# 
 				for(var i in d.count){ var ii=d.count }}
 
-			<div class="layui-form-item" id="param_{{ii}}">
+			<div class="layui-form-item"  id="param_{{ii}}">
 				<div class="layui-inline">
 					<input type="text"  name="parameterId{{ii}}" autocomplete="off" class="layui-input layui-hide"
 							style="border: 0ch;">
@@ -42,6 +42,14 @@
 						<input type="text"  name="parameterMemo{{ii}}"  onchange="onChange({{ii}},{{3}})" autocomplete="off" class="layui-input"
 							style="border: 0ch;">
 					</div>
+					<label class="layui-form-label layui-bg-orange"  style="border: 0ch;"><span id="parameterPri{{ii}}"></span>&nbsp;<b>主键</b></label>
+					<div class="layui-input-inline" style="width: 10%;border: 0ch;">
+						<select  name="parameterPri{{ii}}" onclick="alert('ssss')" lay-filter="Pri" title="{{ii}}" lay-verify="">
+							<option value="true" >是</option>
+							<option value="false"selected>否</option>
+						</select>
+					</div>
+
 					<a style="width: 10%;" onclick="deleteParameter({{ii}})"><i
 							class="layui-icon layui-icon-delete"
 							style="font-size: 35px;color: #ffffff;"></i></a>
@@ -81,10 +89,11 @@
 				<div class="layui-field-box">
 
 					<div class="layui-form-item" pane>
-
-						<input type="checkbox" id="时间" name="时间" title="时间">
-						<input type="checkbox" id="地区" name="地区" title="地区">
-						<input type="checkbox" id="站点" name="站点" title="站点">
+						<input type="checkbox" lay-filter="switch"  id="Id" name="Id" title="Id">
+						<input type="checkbox" lay-filter="switch"  id="时间" name="时间" title="时间">
+						<input type="checkbox" lay-filter="switch"  id="地区" name="地区" title="地区">
+						<input type="checkbox" lay-filter="switch"  id="站点" name="站点" title="站点">
+						<!--<input type="checkbox" lay-filter="switch"  id="你好" name="你好" title="你好">-->
 						<button class="layui-btn layui-btn-sm layui-bg-red" id="_addParameter">手动添加新数据项</button>
 						<button class="layui-btn layui-btn-sm layui-bg-red" id="addParameter">从库中选择添加数据项</button>
 

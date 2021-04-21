@@ -18,10 +18,10 @@ layui.use(['element', 'table', 'jquery'], function () {
 				console.log(res);
 				var data1 = [];
 				for (var item in res) {
-					if (res[item]["参数名"] == '时间' || res[item]["参数名"] == '地区' || res[item]["参数名"] == '站点') continue;
+					if (preSetCheckBox.indexOf(getParameter(res[item]["字段注释"], 'colName'))!=-1) continue;
 					var i = {};
 					i["Id"] =res[item]["参数名"];
-					i["表名"] = res[item]["表名"];
+					i["表名"] = getParameter(res[item]["注释"],'tableName');
 					i["参数名"] =getParameter(res[item]["字段注释"], 'colName');
 					i["单位"] = getParameter(res[item]["字段注释"], 'unit');
 					i["数据类型"] = res[item]["数据类型"];

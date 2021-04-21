@@ -1,7 +1,43 @@
-var hostName = 'markchen7788.xyz:8888'//'localhost:8888'
-var bg_num = 7;
+var hostName ='markchen7788.xyz:8888';//'localhost:8888';
+var bg_num = 16;
 var current_bg_num = 0;
 var changedCols = [], tableInfoChanged = false;
+var preSetCheckBox = ['Id','时间', '地区', '站点'/*,'你好'*/], tabId = getQueryVariable("Id"),preSetJson = {
+    'Id': {
+        "tableId": tabId,
+        "columnName": "Id",
+        "columnComment": "colName=Id&unit=&comment=Id",
+        "columnType": "varchar",
+        "pri":"false"
+    },
+    '时间': {
+        "tableId": tabId,
+        "columnName": "时间",
+        "columnComment": "colName=时间&unit=&comment=时间",
+        "columnType": "timestamp",
+        "pri":"false"
+    },
+    '地区': {
+        "tableId": tabId,
+        "columnName": "地区",
+        "columnComment": "colName=地区&unit=&comment=地区",
+        "columnType": "varchar",
+        "pri":"false"
+    },
+    '站点': {
+        "tableId": tabId,
+        "columnName": '站点',
+        "columnComment": "colName=站点&unit=&comment=站点",
+        "columnType": "varchar",
+        "pri":"false"
+    }
+    // , '你好': {
+    //     "tableId": tabId,
+    //     "columnName": '你好',
+    //     "columnComment": "colName=你好&unit=&comment=你好",
+    //     "columnType": "varchar"
+    // }
+};
 function onChange(Id, c) {
     if (Id > 0 && changedCols.indexOf(Id) == -1 && addCol.indexOf(Id) == -1)
         changedCols.push(Id);
@@ -14,15 +50,21 @@ function onChange(Id, c) {
             case 3: $("#parameterMemo" + Id).attr("class", "layui-badge-dot layui-bg-green"); break;
             case 4: tableInfoChanged = true; $("#tableName").attr("class", "layui-badge-dot layui-bg-green"); break;
             case 5: tableInfoChanged = true; $("#tableComment").attr("class", "layui-badge-dot layui-bg-green"); break;
+            case 6: $("#parameterPri" + Id).attr("class", "layui-badge-dot layui-bg-green"); break;
         }
 
     });
 
 }
+function RandomBg() {
+    var num=Math.floor(Math.random()*100);
+    num=num%bg_num;
+    document.body.style.background = "url(./res/index_bg" + num + ".jpg) ";
+}
 function changeBg() {
     current_bg_num++;
     if (current_bg_num > bg_num) current_bg_num = 0;
-    document.body.style.background = "url(./res/index_bg" + current_bg_num + ".jpg) no-repeat";
+    document.body.style.background = "url(./res/index_bg" + current_bg_num + ".jpg)";
 }
 
 function getQueryVariable(variable) {
