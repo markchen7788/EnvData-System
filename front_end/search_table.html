@@ -14,7 +14,7 @@
 	};
 </style>
 
-<body style="padding: 20px;">
+<body style="padding: 20px;" class="layui-main">
 
 	<form class="layui-form" style="opacity: 0.8;" action="">
 		<div class="layui-row">
@@ -22,6 +22,7 @@
 				<input type="text" name="condition" placeholder="查询" autocomplete="off" class="layui-input">
 			</div>
 			<div class="layui-col-md3 ">
+				&nbsp;&nbsp;
 				<button class="layui-btn " lay-submit lay-filter="formDemo">查询</button>
 			</div>
 		</div>
@@ -54,7 +55,7 @@
 				if(i=="limit"||i=="page"||d[i][3]<start||d[i][3]>end) continue;
 		}}
 		
-		<div class="layui-card">
+		<div class="layui-card" style="opacity: 0.8;">
 			<div class="layui-card-header layui-bg-orange">	<b>{{d[i][0]}}</b>
 				<div class="layui-layout-right">
 					<b><i class="layui-icon layui-icon-time">{{d[i][1]}}</i></b>

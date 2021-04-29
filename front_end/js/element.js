@@ -1,23 +1,12 @@
-layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
+var colNameJson = { "Id": "Id", "elementName": "元素名", "elementUnit": "元素单位", "dataType": "元素类型", "elementMemo": "备注" }
+layui.use(['element', 'table', 'jquery', 'laytpl'], function () {
 	var element = layui.element;
 	var table = layui.table;
 	const $ = layui.jquery;
 	var form = layui.form;
-	form.render();
 	var laytpl = layui.laytpl;
 	var tableCols = {};
 	var data1;
-	var colList = [];
-	form.on('submit(formDemo)', function (data) {
-		layer.alert(JSON.stringify(data.field), {
-			title: '最终的提交信息'
-		})
-		return false;
-	});
-	var tableName = getQueryVariable("tableName");
-	var condition = { "tableName": tableName, "condition": "" }
-	renderThisPage(condition);
-
 	function renderThisPage(json) {
 		var load = layer.load(2, { time: 10 * 1000 });
 		$.ajax({
@@ -26,22 +15,22 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 			data: json,
 			async: false,
 			success: function (res) {
-				//console.log(res)
+
 				data1 = res;
+				console.log(JSON.stringify(data1));
 				layer.close(load);
 			}
 			//…
 		});
-
-		var col = [[{ type: 'checkbox', fixed: 'left' }, { field: 'Id', title: 'Id', sort: true }]], edi = { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 };
-		for (var key in data1[0]) {
-			if (key == 'Id') continue;
+		var col = [[{ type: 'checkbox', fixed: 'left' }]], edi = { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 };
+		for (var key in colNameJson) {
 			var item = { field: key, title: key, sort: true }
-			colList.push(key);
 			col[0].push(item)
 			tableCols[key] = "";
 		}
 		col[0].push(edi)
+		console.log(col);
+
 		table.render({
 			elem: '#test'
 			, data: data1
@@ -52,18 +41,20 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 			, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
 			, defaultToolbar: ['filter', 'print']
 			, cols: col
-			, page: { limit: 18, limits: [10, 20, 50, 100, 200, 300] }
-			, initSort: {
+			, page: { limit: 18 }
+			,initSort: {
 				field: 'id' //排序字段，对应 cols 设定的各字段名
-				, type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
-			}
+				,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+			  }
 		});
+
 	}
 
+	renderThisPage({ "tableName": "element", "condition": "" });
 
 	form.on('submit(saveElementInfo)', function (data) {
 		var load = layer.load(2, { time: 10 * 1000 });
-		data.field.tableName = tableName;
+		data.field.tableName = 'element';
 		if (data.field.Id == -1)//增加
 		{
 			delete data.field.Id;
@@ -105,6 +96,8 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 	});
 
 
+
+
 	table.on('toolbar(test)', function (obj) {
 		var checkStatus = table.checkStatus(obj.config.id);
 		switch (obj.event) {
@@ -112,14 +105,14 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 				tableCols.Id = -1;
 				addLay(tableCols);
 				break;
-			case 'return':
-				window.history.back();
-				break;
 			case 'import':
 				document.getElementById('upload').click();
 				break;
 			case 'export':
 				exportToExcel(data1);
+				break;
+			case 'return':
+				window.history.back();
 				break;
 			case 'full':
 				$("body").attr('class', '');
@@ -130,36 +123,6 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 				$("body").attr('class', 'layui-main');
 				$("#full").attr('class', 'layui-inline');
 				$("#restore").attr('class', 'layui-hide');
-				break;
-			case 'chart':
-				var html = document.getElementById("Axis").innerHTML
-				// console.log(html);
-				// console.log(colList);
-				laytpl(html).render(colList, function (res) {
-					html = res;
-				});
-				var addLayer = layer.open({
-					type: 1,
-					title: '生成折线图',
-					offset: 'auto',
-					area: ['500px','600px'],
-					shadeClose: true,
-					shade: 0, //遮罩透明度
-					content: html, //这里content是一个普通的String
-					success: function(){ form.render('select');form.render('checkbox');},
-					cancel: function (index, layero) {
-						//window.location.reload();
-					}
-				});
-				// layer.style(addLayer, {
-				// 	opacity: 0.9,
-				// });
-
-				// layer.open({
-				// 	type: 2,
-				// 	area: ['1000px', '600px'],
-				// 	content: './figure.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-				// });
 				break;
 			case 'multiDelete':
 				var data = checkStatus.data;
@@ -185,7 +148,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 					formType: 0,
 					title: '查询'
 				}, function (value, index, elem) {
-					renderThisPage({ "tableName": tableName, "condition": value });
+					renderThisPage({ "tableName": "element", "condition": value });
 					layer.close(index);
 				});
 				layer.style(L, {
@@ -221,7 +184,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 		var data = [];
 		for (var item in tmp) {
 			var temp = {};
-			temp.tableName = tableName;
+			temp.tableName = "element";
 			temp.condition = "Id=" + tmp[item].Id;
 			data.push(temp);
 		}
@@ -243,7 +206,6 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 		});
 
 	}
-
 	function addLay(data) {
 		var html = demo.innerHTML;
 		laytpl(html).render(data, function (res) {
@@ -267,9 +229,8 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 });
 
 function getXlsxJson(data) {
-	var tableName = getQueryVariable("tableName");
 	for (var item in data) {
-		data[item]['tableName'] = tableName;
+		data[item]['tableName'] = 'element';
 	}
 	layui.use(['jquery'], function () {
 		const $ = layui.jquery;

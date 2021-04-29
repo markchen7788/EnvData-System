@@ -1,4 +1,4 @@
-var hostName ='markchen7788.xyz:8888';//'localhost:8888';
+var hostName ='markchen7788.xyz:8888';//'localhost:8888'
 var bg_num = 16;
 var current_bg_num = 0;
 var changedCols = [], tableInfoChanged = false;
@@ -102,4 +102,30 @@ function dateFormat(fmt, date) {
         };
     };
     return fmt;
+}
+
+function exportToExcel(result)
+{
+    layui.use('table',function()
+    {
+        var table=layui.table;
+        var tpl=[],exp=[];
+		for(var item in result)
+		{
+			if(item==0)
+			{
+				for(var key in result[item])
+				{
+					tpl.push(key);
+				}
+			}
+			var tmp=[];
+				for(var key in result[item])
+				{
+					tmp.push(result[item][key]);
+				}
+				exp.push(tmp);
+		}
+		table.exportFile(tpl,exp,'xls');
+    });
 }
