@@ -91,7 +91,7 @@
 				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
 					<legend>请选择横坐标</legend>
 				</fieldset>
-				<select name="interest" style="overflow: visible;" lay-filter="aihao">
+				<select name="xAxis" style="overflow: visible;" lay-filter="aihao">
 					{{# for(var i in d) { }}
 					<option value="{{d[i]}}">{{d[i]}}</option>
 					{{# } }}
@@ -104,7 +104,7 @@
 				<input type="checkbox" name="{{d[i]}}" title="{{d[i]}}"  lay-skin="primary"></div>
 				{{# } }}
 				<br><br><br><br><br><br><br><br><br>
-				<button type="button" lay-submit lay-filter="saveElementInfo"
+				<button type="button" lay-submit lay-filter="saveAixs"
 					class="layui-btn layui-btn-fluid">确认</button>
 			</form>
 		</div>

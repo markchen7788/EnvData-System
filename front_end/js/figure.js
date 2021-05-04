@@ -1,22 +1,47 @@
-var dataJson = {};
-for (var i in data3) {
-    for (var j in data3[i]) {
-        if (dataJson.hasOwnProperty(j)) {
-            if (parseFloat(data3[i][j]) != NaN && j != '时间')
-                dataJson[j].push(parseFloat(data3[i][j]));
-            else
-                dataJson[j].push(data3[i][j]);
+
+layui.use(['jquery', 'layer'], function () {
+    const $ = layui.jquery;
+    $.ajax({
+        url: 'http://' + hostName + '/test/select',
+        type: 'post',
+        data: { "tableName": getQueryVariable("tableName"), "condition": "" },
+        async: false,
+        success: function (res) {
+            //console.log(res)
+            data3 = res;
+
         }
-        else {
-            var array = [];
-            dataJson[j] = array;
+        //…
+    });
+
+});
+
+console.log(data3);
+var categorie = [], res = [], axis = getQueryVariable('axis').split(','), xName;
+console.log(axis);
+transform(data3, axis[0], axis.splice(1, axis.length - 1))
+function transform(data3, xAxis, yAxis) {
+    console.log(yAxis);
+    xName = xAxis;
+    for (var i = 0; i < yAxis.length; i++) {
+        var tmp = {};
+        tmp['name'] = yAxis[i];
+        tmp['data'] = [];
+        res.push(tmp);
+    }
+    for (var i in data3) {
+        categorie.push(data3[i][xAxis]);
+        for (var j = 0; j < yAxis.length; j++) {
+            res[j].data.push(parseFloat(data3[i][yAxis[j]]));
         }
     }
 }
-console.log(dataJson);
+console.log(categorie);
+console.log(res);
+
+
 Highcharts.chart('container', {
     chart: {
-        type: 'area',
         zoomType: 'x',
         panning: true,
         panKey: 'shift',
@@ -24,84 +49,73 @@ Highcharts.chart('container', {
             minWidth: 600
         }
     },
-
-    caption: {
-        text: 'This chart uses the Highcharts Annotations feature to place labels at various points of interest. The labels are responsive and will be hidden to avoid overlap on small screens.'
-    },
-
     title: {
-        text: '2017 Tour de France Stage 8: Dole - Station des Rousses'
+        text: 'EnvData环境监测数据管理系统'
     },
 
-    accessibility: {
-        description: 'This line chart uses the Highcharts Annotations feature to place labels at various points of interest. The labels are responsive and will be hidden to avoid overlap on small screens. Image description: An annotated line chart illustrates the 8th stage of the 2017 Tour de France cycling race from the start point in Dole to the finish line at Station des Rousses. Altitude is plotted on the Y-axis, and distance is plotted on the X-axis. The line graph is interactive, and the user can trace the altitude level along the stage. The graph is shaded below the data line to visualize the mountainous altitudes encountered on the 187.5-kilometre stage. The three largest climbs are highlighted at Col de la Joux, Côte de Viry and the final 11.7-kilometer, 6.4% gradient climb to Montée de la Combe de Laisia Les Molunes which peaks at 1200 meters above sea level. The stage passes through the villages of Arbois, Montrond, Bonlieu, Chassal and Saint-Claude along the route.',
-        landmarkVerbosity: 'one'
-    },
-
-    lang: {
-        accessibility: {
-            screenReaderSection: {
-                annotations: {
-                    descriptionNoPoints: '{annotationText}, at distance {annotation.options.point.x}km, elevation {annotation.options.point.y} meters.'
-                }
-            }
-        }
-    },
-
-    credits: {
-        enabled: false
-    },
-
-    annotations: [{
-        draggable: '',
-        labelOptions: {
-            backgroundColor: 'rgba(255,255,255,0.5)',
-            verticalAlign: 'top',
-            y: 15
-        },
-    }],
-
-    xAxis: {
-        labels: {
-            format: '{value}'
-        },
-        categories: dataJson['时间'],
-        minRange: 5,
-        title: {
-            text: 'Distance'
-        },
-        accessibility: {
-            rangeDescription: 'Range: 0 to 187.8km.'
-        }
+    subtitle: {
+        text: '图表生成'
     },
 
     yAxis: {
-        startOnTick: true,
-        endOnTick: false,
-        maxPadding: 0.35,
         title: {
-            text: null
-        },
-        labels: {
-            format: '{value} m'
-        },
-        accessibility: {
-            description: 'Elevation',
-            rangeDescription: 'Range: 0 to 1,553 meters'
+            text: '元素'
         }
     },
 
-    tooltip: {
-        headerFormat: 'Distance: {point.x:.1f} km<br>',
-        pointFormat: '{point.y} m a. s. l.',
-        shared: true
+    xAxis: {
+        title: {
+            text: xName
+        },
+        categories: categorie//[1, 2, 3, 4, 5, 6, 7, 8]
     },
 
     legend: {
-        enabled: false
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
     },
 
-    series: [{
-        data: dataJson['WIN_D']
-    }]
+    // plotOptions: {
+    //     series: {
+    //         label: {
+    //             connectorAllowed: false
+    //         },
+    //         pointStart: 2010
+    //     }
+    // },
+
+    series: res,
+    //  [{
+    //     name: 'Installation',
+    //     data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+    // }, {
+    //     name: 'Manufacturing',
+    //     data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+    // }, {
+    //     name: 'Sales & Distribution',
+    //     data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+    // }, {
+    //     name: 'Project Development',
+    //     data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+    // }, {
+    //     name: 'Other',
+    //     data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+    // }],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
+
 });

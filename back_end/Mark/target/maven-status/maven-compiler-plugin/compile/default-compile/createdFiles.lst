@@ -1,0 +1,4 @@
+com\envDataManager\app\bean\col.class
+com\envDataManager\app\db\db.class
+com\envDataManager\app\envDataManagerApp.class
+com\envDataManager\app\web\test.class

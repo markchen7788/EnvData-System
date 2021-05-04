@@ -1,4 +1,4 @@
-layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
+layui.use(['element', 'table', 'jquery', 'laytpl', 'form'], function () {
 	var element = layui.element;
 	var table = layui.table;
 	const $ = layui.jquery;
@@ -103,7 +103,26 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 		}
 		return false;
 	});
-
+	form.on('submit(saveAixs)', function (data) {
+		var tmp=data.field;
+		var yAxis=[];
+		yAxis.push(tmp.xAxis);
+		delete tmp.xAxis;
+		for(var i in tmp)
+		yAxis.push(i);
+		console.log(yAxis.toString());
+		layer.open({
+			type: 2,
+			title: '折线图',
+			offset: 'auto',
+			resize: true,
+			area: ['1000px', '600px'],
+			shadeClose: true,
+			shade: 0, //遮罩透明度
+			content: "./figure.html?tableName="+tableName+"&axis="+yAxis.toString(), //这里content是一个普通的String
+		});
+		return false;
+	});
 
 	table.on('toolbar(test)', function (obj) {
 		var checkStatus = table.checkStatus(obj.config.id);
@@ -135,25 +154,25 @@ layui.use(['element', 'table', 'jquery', 'laytpl','form'], function () {
 				var html = document.getElementById("Axis").innerHTML
 				// console.log(html);
 				// console.log(colList);
-				laytpl(html).render(colList, function (res) {
+				laytpl(html).render(['Id'].concat(colList), function (res) {
 					html = res;
 				});
 				var addLayer = layer.open({
 					type: 1,
 					title: '生成折线图',
 					offset: 'auto',
-					area: ['500px','600px'],
+					area: ['500px', '600px'],
 					shadeClose: true,
 					shade: 0, //遮罩透明度
 					content: html, //这里content是一个普通的String
-					success: function(){ form.render('select');form.render('checkbox');},
+					success: function () { form.render('select'); form.render('checkbox'); },
 					cancel: function (index, layero) {
 						//window.location.reload();
 					}
 				});
-				// layer.style(addLayer, {
-				// 	opacity: 0.9,
-				// });
+				layer.style(addLayer, {
+					opacity: 0.9,
+				});
 
 				// layer.open({
 				// 	type: 2,

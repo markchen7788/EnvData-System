@@ -12,9 +12,9 @@ layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 	});
 	updateCurrentPage("", "1");
 	function updateCurrentPage(con, page) {
-		var condition = { "condition": con };
+		var condition = { "tableName":"col","condition": con };
 		$.ajax({
-			url: 'http://' + hostName + '/test/getTableInfo',
+			url: 'http://' + hostName + '/test/select',
 			type: 'post',
 			data: condition,
 			success: function (res) {
@@ -26,12 +26,12 @@ layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 					if (!item.hasOwnProperty(res[i].表名)) {
 						_count++;
 						item[res[i].表名] = []
-						item[res[i].表名].push(getParameter(res[i].注释, 'tableName'))
+						item[res[i].表名].push(res[i].表名)
 						item[res[i].表名].push(dateFormat("YYYY-mm-dd HH:MM:SS", new Date(res[i].创建时间)))
 						item[res[i].表名].push(getParameter(res[i].注释, 'comment'))
 						item[res[i].表名].push(_count)
 					}
-					item[res[i].表名].push(getParameter(res[i].字段注释, 'colName'));
+					item[res[i].表名].push(res[i].参数名);
 				}
 				console.log(item)
 
