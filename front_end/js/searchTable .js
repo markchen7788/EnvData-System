@@ -13,12 +13,13 @@ layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 	updateCurrentPage("", "1");
 	function updateCurrentPage(con, page) {
 		var condition = { "tableName":"col","condition": con };
+		var load = layer.load(2, { time: 10 * 1000 });
 		$.ajax({
 			url: 'http://' + hostName + '/test/select',
 			type: 'post',
 			data: condition,
 			success: function (res) {
-				console.log(res)
+				// console.log(res)
 				var _count = 0;
 				item = {};
 				for (var i = 0; i < res.length; i++) {
@@ -28,13 +29,15 @@ layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 						item[res[i].表名] = []
 						item[res[i].表名].push(res[i].表名)
 						item[res[i].表名].push(dateFormat("YYYY-mm-dd HH:MM:SS", new Date(res[i].创建时间)))
-						item[res[i].表名].push(getParameter(res[i].注释, 'comment'))
+						item[res[i].表名].push(res[i].area)
+						item[res[i].表名].push(res[i].siteName)
+						item[res[i].表名].push(res[i].comment)
 						item[res[i].表名].push(_count)
 					}
 					item[res[i].表名].push(res[i].参数名);
 				}
-				console.log(item)
-
+				// console.log(item)
+				layer.close(load);
 				laypage.render({
 					elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
 					, count: _count //数据总数，从服务端得到
@@ -48,8 +51,8 @@ layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 					, layout: ['count', 'page', 'prev', 'next', 'limit', 'limits']
 					, jump: function (obj, first) {
 						//obj包含了当前分页的所有参数，比如：
-						console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-						console.log(obj.limit); //得到每页显示的条数
+						// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+						// console.log(obj.limit); //得到每页显示的条数
 
 						//首次不执行
 						if (!first) {
@@ -75,20 +78,21 @@ layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 
 
 });
-function deleteTable(Id, _name) {
+function deleteTable(_name) {
 	layui.use(['jquery'], function () {
 		const $ = layui.jquery;
 		layer.confirm('亲亲，确定要删除表“' + _name + '”么?', { icon: 3, title: '提示' }, function (index) {
 			//do something
-
+			var load = layer.load(2, { time: 10 * 1000 });
 			$.ajax({
 				url: 'http://' + hostName + '/test/deleteTable',
 				type: 'post',
-				data: { "tableId": Id },
+				data: { "tableName": _name },
 				success: function (res) {
-					console.log(res);
-					if (res == true) { layer.msg("删除成功！", { icon: 1 }); location.reload(); }
+					// console.log(res);
+					if (res == true) {location.reload(); }
 					else layer.msg("删除失败！", { icon: 5 });
+					layer.close(load);
 				}
 			});
 			layer.close(index);

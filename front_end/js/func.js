@@ -1,4 +1,4 @@
-var hostName ='markchen7788.xyz:8888';//'localhost:8888'
+var hostName ='markchen7788.xyz:8888';//'localhost:8888';
 var bg_num = 16;
 var current_bg_num = 0;
 var changedCols = [], tableInfoChanged = false;

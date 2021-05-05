@@ -20,6 +20,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form'], function () {
 
 	function renderThisPage(json) {
 		var load = layer.load(2, { time: 10 * 1000 });
+		var unit={};
 		$.ajax({
 			url: 'http://' + hostName + '/test/select',
 			type: 'post',
@@ -28,6 +29,18 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form'], function () {
 			success: function (res) {
 				//console.log(res)
 				data1 = res;
+				//layer.close(load);
+			}
+			//…
+		});
+		$.ajax({
+			url: 'http://' + hostName + '/test/getUnit',
+			type: 'post',
+			data: {"tableName":json.tableName},
+			async: false,
+			success: function (res) {
+				console.log(res)
+				unit=res;
 				layer.close(load);
 			}
 			//…
@@ -36,7 +49,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form'], function () {
 		var col = [[{ type: 'checkbox', fixed: 'left' }, { field: 'Id', title: 'Id', sort: true }]], edi = { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 };
 		for (var key in data1[0]) {
 			if (key == 'Id') continue;
-			var item = { field: key, title: key, sort: true }
+			var item = { field: key, title: key+"("+unit[key]+")", sort: true }
 			colList.push(key);
 			col[0].push(item)
 			tableCols[key] = "";
@@ -48,7 +61,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form'], function () {
 			, height: 'full'
 			, even: 'true'
 			, size: 'sm'
-			, cellMinWidth: 100 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+			, cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
 			, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
 			, defaultToolbar: ['filter', 'print']
 			, cols: col
@@ -104,12 +117,12 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form'], function () {
 		return false;
 	});
 	form.on('submit(saveAixs)', function (data) {
-		var tmp=data.field;
-		var yAxis=[];
+		var tmp = data.field;
+		var yAxis = [];
 		yAxis.push(tmp.xAxis);
 		delete tmp.xAxis;
-		for(var i in tmp)
-		yAxis.push(i);
+		for (var i in tmp)
+			yAxis.push(i);
 		console.log(yAxis.toString());
 		layer.open({
 			type: 2,
@@ -119,7 +132,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form'], function () {
 			area: ['1000px', '600px'],
 			shadeClose: true,
 			shade: 0, //遮罩透明度
-			content: "./figure.html?tableName="+tableName+"&axis="+yAxis.toString(), //这里content是一个普通的String
+			content: "./figure.html?tableName=" + tableName + "&axis=" + yAxis.toString(), //这里content是一个普通的String
 		});
 		return false;
 	});
@@ -179,6 +192,18 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form'], function () {
 				// 	area: ['1000px', '600px'],
 				// 	content: './figure.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 				// });
+				break;
+			case 'statistic':
+				var l=layer.open({
+					title: '统计分析',
+					type: 2,
+					shade: 0,
+					area: ['1000px', '320px'],
+					content: './statistic.html?tableName='+tableName //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+				});
+				layer.style(l, {
+					opacity: 0.9,
+				});
 				break;
 			case 'multiDelete':
 				var data = checkStatus.data;

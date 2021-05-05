@@ -1,3 +1,4 @@
+var curTableName="site";
 layui.use(['element', 'table', 'jquery'], function () {
 	var element = layui.element;
 	var table = layui.table;
@@ -10,26 +11,13 @@ layui.use(['element', 'table', 'jquery'], function () {
 	updataForm("")
 	function updataForm(condition) {
 		$.ajax({
-			url: 'http://' + hostName + '/test/getAllCol',
+			url: 'http://' + hostName + '/test/select',
 			type: 'post',
-			data: { 'condition': condition },
+			data: { "tableName":curTableName,'condition': condition },
 			success: function (res) {
 
-				console.log(res);
-				var data1 = [];
-				for (var item in res) {
-					if (preSetCheckBox.indexOf(getParameter(res[item]["字段注释"], 'colName'))!=-1) continue;
-					var i = {};
-					i["Id"] =res[item]["参数名"];
-					i["表名"] = getParameter(res[item]["注释"],'tableName');
-					i["参数名"] =getParameter(res[item]["字段注释"], 'colName');
-					i["单位"] = getParameter(res[item]["字段注释"], 'unit');
-					i["数据类型"] = res[item]["数据类型"];
-					i["备注"] = getParameter(res[item]["字段注释"], 'comment');
-					data1.push(i);
-				}
-
-
+				// console.log(res);
+				var data1 =res;
 				var col = [[{ type: 'checkbox', fixed: 'left' }]];
 				for (var key in data1[0]) {
 					if(key=='Id') var item = { field: key, title: key, sort: true, hide:true};
@@ -42,7 +30,6 @@ layui.use(['element', 'table', 'jquery'], function () {
 					, data: data1
 					, cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
 					, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-					, defaultToolbar: ['filter', 'print', 'exports']
 					, cols: col
 					, page: true
 				});

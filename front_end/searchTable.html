@@ -22,7 +22,6 @@
 				<input type="text" name="condition" placeholder="查询" autocomplete="off" class="layui-input">
 			</div>
 			<div class="layui-col-md3 ">
-				&nbsp;&nbsp;
 				<button class="layui-btn " lay-submit lay-filter="formDemo">查询</button>
 			</div>
 		</div>
@@ -52,7 +51,7 @@
 			var start=(d["page"]-1)*d["limit"]+1;
 			var end=start+d["limit"]-1;
 			for(var i in d){ 
-				if(i=="limit"||i=="page"||d[i][3]<start||d[i][3]>end) continue;
+				if(i=="limit"||i=="page"||d[i][5]<start||d[i][5]>end) continue;
 		}}
 		
 		<div class="layui-card" style="opacity: 0.8;">
@@ -63,10 +62,12 @@
 			</div>
 			<div class="layui-card-body">
 				
-				<span class="layui-badge layui-bg-green">{{d[i][2]}}</span>
+				<span class="layui-badge layui-bg-blue">{{d[i][2]}}</span>
+				<span class="layui-badge layui-bg-blue">{{d[i][3]}}</span>
+				<span class="layui-badge layui-bg-blue">{{d[i][4]}}</span>
 				<hr class="layui-border-orange">
-				{{# for(var j=4;j<d[i].length;j++){ }}
-				<span class="layui-badge">{{d[i][j]}}</span>
+				{{# for(var j=6;j<d[i].length;j++){ }}
+				<span class="layui-badge layui-bg-green">{{d[i][j]}}</span>
 			{{#
 			 }
 			}}
@@ -76,7 +77,7 @@
 				style="color: #FF5722;">查看</i></a>
 		&nbsp;&nbsp;<a href="create_table.html?Id={{i}}"><i class="layui-icon layui-icon-edit"
 				style="color: #FF5722;">修改</i></a>&nbsp;&nbsp;
-				<a href="javascript:deleteTable('{{i}}','{{d[i][0]}}')"><i class="layui-icon layui-icon-delete"
+				<a href="javascript:deleteTable('{{d[i][0]}}')"><i class="layui-icon layui-icon-delete"
 					style="color: #FF5722;">删除</i></a>
 					
 		</b>
@@ -87,5 +88,5 @@
 	{{# } }}
 	</script>
 </body>
-<script src="./js/search_table .js"></script>
+<script src="./js/searchTable .js"></script>
 </html>

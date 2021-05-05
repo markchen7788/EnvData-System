@@ -17,7 +17,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl'], function () {
 			success: function (res) {
 
 				data1 = res;
-				console.log(JSON.stringify(data1));
+				//console.log(JSON.stringify(data1));
 				layer.close(load);
 			}
 			//…
@@ -29,7 +29,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl'], function () {
 			tableCols[key] = "";
 		}
 		col[0].push(edi)
-		console.log(col);
+		//console.log(col);
 
 		table.render({
 			elem: '#test'

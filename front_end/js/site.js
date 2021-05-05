@@ -10,9 +10,9 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 	form.on('submit(formDemo)', function (data) {
 		var load = layer.load(2, { time: 10 * 1000 });
 		$.ajax({
-			url: 'http://' + hostName + '/test/getSiteInfo',
+			url: 'http://' + hostName + '/test/select',
 			type: 'post',
-			data: data.field,
+			data: { "tableName": "site", "condition": data.field.condition },
 			success: function (res) {
 				changePage(1, 6, res);
 				layer.close(load);
@@ -21,52 +21,59 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 		return false;
 	});
 	form.on('submit(saveSiteInfo)', function (data) {
+
 		var load = layer.load(2, { time: 10 * 1000 });
-		$.ajax({
-			url: 'http://' + hostName + '/test/addSite',
-			type: 'post',
-			data: JSON.stringify(data.field),
-			dataType: "json",
-			contentType: "application/json",
-			success: function (res) {
-				if (res == true) { layer.msg("添加成功！", { icon: 1 }); location.reload(); }
-				else layer.msg("添加失败！", { icon: 5 });
-				layer.close(load);
-			}
-		});
+		data.field['tableName'] = 'site';
+		if (data.field.Id == -1)//增加
+		{
+			delete data.field.Id;
+			$.ajax({
+				url: 'http://' + hostName + '/test/insert',
+				type: 'post',
+				data: JSON.stringify([data.field]),
+				dataType: "json",
+				contentType: "application/json",
+				success: function (res) {
+
+					if (res == true) layer.msg("添加成功！")
+					else layer.msg("添加失败！")
+					layer.close(load);
+				}
+				//…
+			});
+		}
+		else//修改
+		{
+			data.field.condition = 'Id=' + data.field.Id;
+			delete data.field.Id;
+			$.ajax({
+				url: 'http://' + hostName + '/test/modify',
+				type: 'post',
+				data: JSON.stringify(data.field),
+				dataType: "json",
+				contentType: "application/json",
+				success: function (res) {
+
+					if (res == true) layer.msg("修改成功！")
+					else layer.msg("修改失败！")
+					layer.close(load);
+				}
+			});
+		}
 		return false;
 	});
-	$("#export").click(function()
-	{
-		//var tpl=[],exp=[];
+	$("#export").click(function () {
 		delete result[0].md;
 		exportToExcel(result);
-		// for(var item in result)
-		// {
-		// 	if(item==0)
-		// 	{
-		// 		for(var key in result[item])
-		// 		{
-		// 			tpl.push(key);
-		// 		}
-		// 	}
-		// 	var tmp=[];
-		// 		for(var key in result[item])
-		// 		{
-		// 			tmp.push(result[item][key]);
-		// 		}
-		// 		exp.push(tmp);
-		// }
-		// table.exportFile(tpl,exp,'xls');
 	});
-	var condition = { "condition": "" }
+	var condition = { "tableName": "site", "condition": "" }
 	$.ajax({
-		url: 'http://' + hostName + '/test/getSiteInfo',
+		url: 'http://' + hostName + '/test/select',
 		type: 'post',
 		data: condition,
 		async: false,
 		success: function (res) {
-			console.log(res);
+			//console.log(res);
 			result = res;
 			laypage.render({
 				elem: 'test2' //注意，这里的 test1 是 ID，不用加 # 号
@@ -81,8 +88,8 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 				, layout: ['count', 'page', 'prev', 'next', 'limit', 'limits']
 				, jump: function (obj, first) {
 					//obj包含了当前分页的所有参数，比如：
-					console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-					console.log(obj.limit); //得到每页显示的条数
+					// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+					// console.log(obj.limit); //得到每页显示的条数
 
 					//首次不执行
 					if (!first) {
@@ -134,7 +141,11 @@ function addTable(item) {
 			title: '站点信息',
 			offset: 'auto',
 			area: '500px',
-			content: html //这里content是一个普通的String
+			content: html, //这里content是一个普通的String
+			cancel: function (index, layero) {
+				location.reload();
+				return false;
+			}
 		});
 		form.val("stationInfo", now[item]);
 		layer.style(addLayer, {
@@ -150,9 +161,11 @@ function deleteTable(Id) {
 			//do something
 			var load = layer.load(2, { time: 10 * 1000 });
 			$.ajax({
-				url: 'http://' + hostName + '/test/deleteSite',
+				url: 'http://' + hostName + '/test/delete',
 				type: 'post',
-				data: { "siteId": Id },
+				data: JSON.stringify([{"tableName":"site","condition":"Id="+Id}]),
+				dataType: "json",
+				contentType: "application/json",
 				success: function (res) {
 					console.log(res);
 
