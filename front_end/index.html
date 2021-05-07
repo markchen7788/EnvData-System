@@ -6,66 +6,71 @@
   <title>可动态扩展的环境监测数据管理系统</title>
   <link rel="stylesheet" href="./res/layui/css/layui.css">
   <style>
-    .my-background{
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    background-image: url("./res/index_bg3.jpg");
-    opacity: 0.7 ;
-}
+    .my-background {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      background-image: url("./res/index_bg4.jpg");
+    }
+    .my-opacity {
+      opacity: 0.7;
+    }
   </style>
 </head>
-<script src="./res/layui/layui.js"></script>
 <script src="./js/func.js"></script>
 <body class="my-background" >
   <div class="layui-layout layui-layout-admin">
-    <div class="layui-header ">
-      <div class="layui-logo"><a href="javascript:changeBg()" ><font color="#009688">EnvData System</font></a></div>
+    <div class="layui-header my-opacity ">
+      <div class="layui-logo"><a href="javascript:changeBg()">
+          <font color="#009688">EnvData System</font>
+        </a></div>
       <!-- 头部区域（可配合layui已有的水平导航） -->
       <ul class="layui-nav layui-layout-right">
         <li class="layui-nav-item">
           <a href="javascript:;">
-            <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+            <img src="./res/basicInfoSettings.jpeg" class="layui-nav-img">
+            基础信息配置
+          </a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:changeWindow('./site.html');">站点信息配置</a></dd>
+            <dd><a href="javascript:changeWindow('./element.html');">元素信息配置</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">
+            <img src="./res/table.jpeg" class="layui-nav-img">
+            报表管理
+          </a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:changeWindow('./searchTable.html');">查看报表</a></dd>
+            <dd><a href="javascript:changeWindow('./createTable.html');">新建报表</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="http://markchen7788.xyz/phpProjects/fileManager/index.php?dir_name=home">
+            <img src="./res/dir.jpeg" class="layui-nav-img">
+            文件管理
+          </a>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">
+            <img src="./res/profile.jpeg" class="layui-nav-img">
             Admin
           </a>
           <dl class="layui-nav-child">
-            <dd><a href="">基本资料</a></dd>
-            <dd><a href="">安全设置</a></dd>
+            <dd><a>基本资料</a></dd>
+            <dd><a href="javascript:logout()">退出系统</a></dd>
           </dl>
         </li>
-        <li class="layui-nav-item"><a href="">退出系统</a></li>
       </ul>
     </div>
   </div>
-  <br><br> <br><br>
-  <div align="center">
-    <font size=15 color="#FF5722">EnvData环境监测数据管理系统</font>
-  </div> <br><br> <br><br> <br><br>
-  <br><br> <br><br>
-  <div class="layui-row layui-col-space30">
-    <div class="layui-col-md3 layui-col-md-offset3">
-      <a href="./tableManager.html">
-        <div class="layui-card layui-bg-orange">
-          <div class="layui-card-body" align="center">
-            <br>
-            报表管理
-            <br><br>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="layui-col-md3 ">
-      <a href="http://markchen7788.xyz/phpProjects/fileManager/index.php?dir_name=home">
-        <div class="layui-card layui-bg-orange">
-          <div class="layui-card-body" align="center">
-            <br>
-            文件管理
-            <br><br>
-          </div>
-        </div>
-    </div>
-    </a>
-  </div>
-</body>
+<script src="./res/layui/layui.js"></script>
 <script src="./js/index.js"></script>
+<br><br><br><br>
+<iframe id="frame" src="./searchTable.html" width="100%" height="90%" frameborder=0 scrolling="auto"></frame>
+
+</body>
+
+
 </html>
