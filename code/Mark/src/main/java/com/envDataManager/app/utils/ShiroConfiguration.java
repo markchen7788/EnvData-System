@@ -52,6 +52,7 @@ public class ShiroConfiguration {
 	 */
 	@Bean(name = "shiroFilter")
 	public ShiroFilterFactoryBean shiroFilterFactoryBean() {
+
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(getSecurityManager());
 		Map<String, String> map = new LinkedHashMap<String, String>();

@@ -18,11 +18,12 @@ layui.use(['jquery', 'layer'], function () {
 
 });
 
-console.log(data3);
-var categorie = [], res = [], axis = getQueryVariable('axis').split(','), xName;
-console.log(axis);
+
+var categorie = [], res = [],xName;
+var axis = getQueryVariable('axis').split(',');
+//获取用户选取的横纵坐标参数名
 transform(data3, axis[0], axis.splice(1, axis.length - 1))
-function transform(data3, xAxis, yAxis) {
+function transform(data3, xAxis, yAxis) {//将后端传来的数据格式转换成highcharts可以渲染的格式
     console.log(yAxis);
     xName = xAxis;
     for (var i = 0; i < yAxis.length; i++) {
@@ -38,9 +39,6 @@ function transform(data3, xAxis, yAxis) {
         }
     }
 }
-console.log(categorie);
-console.log(res);
-
 
 Highcharts.chart('container', {
     chart: {

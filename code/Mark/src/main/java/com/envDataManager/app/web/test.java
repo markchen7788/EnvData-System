@@ -21,10 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.envDataManager.app.bean.col;
 import com.envDataManager.app.db.db;
 
 @RestController
@@ -340,6 +338,7 @@ public boolean doLogin(String userName,String pwd)
 		{
 			UsernamePasswordToken token = new UsernamePasswordToken(userName,pwd);
 			SecurityUtils.getSubject().login(token);
+			SecurityUtils.getSubject().getSession().setTimeout(1800000);//设置登录有效时长
 			SecurityUtils.getSubject().getSession().setAttribute("user", res.get(0));
 			return true;
 		}
@@ -351,10 +350,11 @@ public boolean doLogin(String userName,String pwd)
 @CrossOrigin
 @RequestMapping("/logout")
 public String logout() {
+	if(getUser()==null) return 	"logout";
 	String userName= (String) getUser().get("userName");
 	System.out.println(new Date()+" || userName:"+getUser().get("userName")+" || Function:logout");
     SecurityUtils.getSubject().logout();
-    return "<script>window.location='/'</script>";
+    return "logout";
 }
 
 /////////////////////////////////////////注册操作

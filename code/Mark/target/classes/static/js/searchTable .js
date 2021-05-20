@@ -5,7 +5,7 @@ layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 	var laytpl = layui.laytpl;
 	var form = layui.form;
 	var item = {};
-	var lim = 3;
+	var lim = 2;
 	form.on('submit(formDemo)', function (data) {
 		updateCurrentPage(data.field.condition+'&&'+data.field.area, "1")
 		return false;

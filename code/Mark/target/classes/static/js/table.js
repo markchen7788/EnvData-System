@@ -89,8 +89,9 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 			}
 		});
 		var col = [[{ type: 'checkbox', fixed: 'left' }, { field: 'Id', title: 'Id', sort: true }]], edi = { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 };
-		colList = [];
-		for (var key in unit) {
+		//col:存放数据表格的表头
+		colList = [];//存放所有元素名
+		for (var key in unit) {//unit：json，存放”元素-元素单位“键值对。该for循环将利用unit生成数据表格的表头
 			if (key == 'Id') continue;
 			var item = { field: key, title: key + "(" + unit[key] + ")", sort: true }
 			colList.push(key);
@@ -98,16 +99,16 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 			tableCols[key] = "";
 		}
 		col[0].push(edi)
-		table.render({
-			elem: '#test'
-			, data: data1
+		table.render({//渲染HTMl文件中的数据表格
+			elem: '#test'//表格Id
+			, data: data1//后端获取的数据
 			, height: 'full'
 			, even: 'true'
 			, size: 'sm'
 			, cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
 			, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
 			, defaultToolbar: ['filter', 'print']
-			, cols: col
+			, cols: col//数据表格表头
 			, limit: data1.length
 			, initSort: {
 				field: 'id' //排序字段，对应 cols 设定的各字段名
