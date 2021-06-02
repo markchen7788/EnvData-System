@@ -1,104 +1,122 @@
 var user = {};
 RandomBg();
-layui.use(['element', 'jquery'], function () {
-  var element = layui.element;
-  const $ = layui.jquery;
-  $.ajax({
-    url: hostName + '/test/getUser',
-    type: 'get',
-    async: false,
-    success: function (res) {
-      //      console.log(res)
-      // configForm.hostName.value = res.hostName;
-      // configForm.userName.value = res.userName;
-      // configForm.pwd.value = res.pwd;
-      // configForm.dbName.value = res.dbName;
-      user=res;
-      $("#userName").html('<img src="./res/profile.jpeg" class="layui-nav-img">' + res.userName);
-    }
-    //…
-  });
-
+layui.use(['element', 'jquery', 'form'], function () {
+	var element = layui.element;
+	var form = layui.form;
+	const $ = layui.jquery;
+	$.ajax({
+		url: hostName + '/test/getUser',
+		type: 'get',
+		success: function (res) {
+			user = res;
+			$("#userName").html('<img src="./res/profile.jpeg" class="layui-nav-img">' + res.userName);
+			if (res.userName == 'admin') $("#settings").html('<dd><a href="javascript:settings()">系统设置</a></dd>');
+		}
+		//…
+	});
+	$.ajax({
+		url: hostName + '/getConfig',
+		type: 'get',
+		success: function (res) {
+			$("#netDisk").attr("href", res.netDisk);
+		}
+		//…
+	});
+	form.on('submit(formDemo)', function (data) {
+		$.ajax({
+			url: hostName + '/config',
+			type: 'post',
+			data: JSON.stringify(data.field),
+			dataType: "json",
+			contentType: "application/json",
+			success: function (res) {
+				if (res == true) layer.msg("成功配置数据库！")
+				else layer.msg("配置失败！")
+			}
+			//…
+		});
+		return false;
+	});
 
 
 });
 
 function addLay() {
-  layui.use(['element', 'jquery', 'laytpl', 'form', 'table'], function () {
-    var element = layui.element;
-    var table = layui.table;
-    const $ = layui.jquery;
-    var form = layui.form;
-    var laytpl = layui.laytpl;
-    var html = demo.innerHTML;
-    laytpl(html).render(user, function (res) {
-      html = res;
-    });
-    console.log(html);
-    var addLayer = layer.open({
-      type: 1,
-      title: '用户信息',
-      offset: 'auto',
-      area: '500px',
-      content: html, //这里content是一个普通的String
-      success:function (index, layero) {
-        form.render();
-      },
-      cancel: function (index, layero) {
-        window.location.reload();
-      }
-    });
-    layer.style(addLayer, {
-      opacity: 0.9,
-    });
+	layui.use(['element', 'jquery', 'laytpl', 'form', 'table'], function () {
+		var element = layui.element;
+		var table = layui.table;
+		const $ = layui.jquery;
+		var form = layui.form;
+		var laytpl = layui.laytpl;
+		var html = demo.innerHTML;
+		laytpl(html).render(user, function (res) {
+			html = res;
+		});
+		console.log(html);
+		var addLayer = layer.open({
+			type: 1,
+			title: '用户信息',
+			offset: 'auto',
+			area: '500px',
+			content: html, //这里content是一个普通的String
+			success: function (index, layero) {
+				form.render();
+			},
+			cancel: function (index, layero) {
+				window.location.reload();
+			}
+		});
+		layer.style(addLayer, {
+			opacity: 0.9,
+		});
 
-    form.on('submit(saveElementInfo)', function (data) {
-      var load = layer.load(2, { time: 10 * 1000 });
-      data.field.tableName = 'user';
-      data.field.condition = 'Id=' + data.field.Id;
-      delete data.field.Id;
-      $.ajax({
-        url: hostName + '/test/modify',
-        type: 'post',
-        data: JSON.stringify(data.field),
-        dataType: "json",
-        contentType: "application/json",
-        success: function (res) {
+		form.on('submit(saveElementInfo)', function (data) {
+			var load = layer.load(2, { time: 10 * 1000 });
+			data.field.tableName = 'user';
+			data.field.condition = 'Id=' + data.field.Id;
+			delete data.field.Id;
+			$.ajax({
+				url: hostName + '/test/modify',
+				type: 'post',
+				data: JSON.stringify(data.field),
+				dataType: "json",
+				contentType: "application/json",
+				success: function (res) {
 
-          if (res == true) layer.msg("修改成功！")
-          else layer.msg("修改失败！")
-          layer.close(load);
-        }
-        //…
-      });
+					if (res == true) layer.msg("修改成功！")
+					else layer.msg("修改失败！")
+					layer.close(load);
+				}
+				//…
+			});
 
-      return false;
-    });
+			return false;
+		});
 
-  });
+	});
 }
 
 function logout() {
 	layui.use(['element', 'jquery'], function () {
-		  var element = layui.element;
-		  const $ = layui.jquery;
-	 $.ajax({
-		    url: hostName + '/logout',
-		    type: 'get',
-		    async: false,
-		    success: function (res) {
-		     window.location='/login.html'
-		    }
-		    //…
-		  });
+		var element = layui.element;
+		const $ = layui.jquery;
+		$.ajax({
+			url: hostName + '/logout',
+			type: 'get',
+			async: false,
+			success: function (res) {
+				window.location = '/login.html'
+			}
+			//…
+		});
 	});
 }
 function changeWindow(website) {
-  layui.use(['element', 'jquery'], function () {
-    var element = layui.element;
-    const $ = layui.jquery;
-    $("#frame").attr("src", website);
-  });
+	layui.use(['element', 'jquery'], function () {
+		var element = layui.element;
+		const $ = layui.jquery;
+		$("#frame").attr("src", website);
+	});
 
 }
 
@@ -169,4 +187,34 @@ function chooseAdress(tableName) {
 			opacity: 0.9,
 		});
 	});
+}
+
+function settings() {
+	layui.use(['form', 'jquery', 'layer'], function () {
+		var form = layui.form;
+		const $ = layui.jquery;
+		var res;
+		$.ajax({
+			url: hostName + '/getConfig',
+			type: 'get',
+			async: false,
+			success: function (data) {
+				res = data;
+			}
+		});
+		layer.open({
+			type: 1,
+			title: '请配置系统数据库和云盘地址',
+			offset: 'auto',
+			area: ['500px', '600px'],
+			shadeClose: true,
+			shade: 0, //遮罩透明度
+			content: $('#configForm').html(), //这里content是一个普通的String
+			success: function () { form.val("configForm", res); form.render('select'); form.render('checkbox'); },
+			cancel: function (index, layero) {
+				//window.location.reload();
+			}
+		});
+	});
+
 }

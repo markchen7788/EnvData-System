@@ -28,13 +28,12 @@ import com.envDataManager.app.db.db;
 @RestController
 public class test {
 /////普通表格的查询操作-----tableName:表名/condition:查询条件
-	@CrossOrigin
 	@RequestMapping("test/select")
 	public List select(@RequestBody JSONObject jsonParam)
 	{
-		String tableName=jsonParam.getString("tableName"),condition=jsonParam.getString("condition"),page="",count="";
+		String tableName=jsonParam.getString("tableName"),condition=jsonParam.getString("condition"),order="",page="",count="";
 		List res=new ArrayList();
-		if(!StringUtils.isEmpty(condition))
+		if(!StringUtils.isEmpty(condition))//拼接where条件
 		{
 			List colName=db.getdb().executeQuery("SELECT GROUP_CONCAT( `information_schema`.`COLUMNS`.`COLUMN_NAME` SEPARATOR '`,`' ) AS concat FROM `information_schema`.`COLUMNS`  WHERE`information_schema`.`COLUMNS`.TABLE_NAME = '"+tableName+"'");
 			
@@ -51,11 +50,15 @@ public class test {
 			else
 			condition="";
 		}
-		if(jsonParam.containsKey("page"))
+		if(jsonParam.containsKey("order"))//分页操作
+		{
+			order ="ORDER BY `"+jsonParam.getString("order")+"`";
+		}
+		if(jsonParam.containsKey("page"))//分页操作
 		{
 			page="limit "+jsonParam.getString("page");
 		}
-		if(jsonParam.containsKey("count"))
+		if(jsonParam.containsKey("count"))//获取记录总数
 		{
 			String sql="select count(*) from `"+tableName+"` "+condition;
 			System.out.println(new Date()+" || userName:"+getUser().get("userName")+" || Function:select || Sql:"+sql);
@@ -64,7 +67,7 @@ public class test {
 			count=String.valueOf(c);
 			res.add(count);
 		}
-		String sql="select * from `"+tableName+"` "+condition+" "+page;
+		String sql="select * from `"+tableName+"` "+condition+" "+order+" "+page;
 		System.out.println(new Date()+" || userName:"+getUser().get("userName")+" || Function:select || Sql:"+sql);
 		res.addAll(db.getdb().executeQuery(sql));
 		return res;
@@ -72,7 +75,6 @@ public class test {
 
 	
 /////普通表格的插入操作-----jsonArray:json数组,jsonParam:字段的键值对，其中需要有tableName这一键值对来指明操作对象；
-	@CrossOrigin
 	@RequestMapping("test/insert")
 	public boolean insert(@RequestBody JSONArray jsonArray)
 	{
@@ -110,7 +112,6 @@ public class test {
 	}
 
 /////普通表格的修改操作-----jsonParam:字段的键值对，其中需要有tableName这一键值对来指明操作对象,需要有condition这一键值对来指定操作条件；
-	@CrossOrigin
 	@RequestMapping("test/modify")
 	public boolean modify(@RequestBody JSONObject jsonParam)
 	{
@@ -128,7 +129,6 @@ public class test {
 		
 	}
 //////普通表格的删除操作-----jsonArray:json数组,jsonParam:字段的键值对数组，其中每个数组需要有tableName这一键值对来指明操作对象,需要有condition这一键值对来指定操作条件；
-	@CrossOrigin
 	@RequestMapping("test/delete")
 	public boolean delete(@RequestBody JSONArray jsonArray)
 	{
@@ -152,7 +152,6 @@ public class test {
 	}
 	
 ///////////////////////////////////获取该表的各列的统计信息，包括max、min、avg、std
-	@CrossOrigin
 	@RequestMapping("test/getStatistics")
 	public List getStatistics(String tableName)
 	{
@@ -186,21 +185,23 @@ public class test {
 	}
 
 /////////////////////////////////////////////////获取参数单位
-@CrossOrigin
 @RequestMapping("test/getUnit")
 public HashMap getUnit(String tableName)
 {
-String sql="SELECT col.`参数名` AS na,col.elementUnit AS unit FROM col WHERE col.`表名`='"+tableName+"';";
+String sql="SELECT col.`参数名` AS na,col.`主键`,col.elementUnit AS unit FROM col WHERE col.`表名`='"+tableName+"';";
 System.out.println(new Date()+" || userName:"+getUser().get("userName")+" || Function:getUnit || Sql:"+sql);
 List<HashMap> tmp=db.getdb().executeQuery(sql);
+List<String> pri=new ArrayList<>();
 HashMap res=new HashMap();
 
 
 for(HashMap item:tmp)
 {
 	res.put((String)item.get("参数名"), (String)item.get("elementUnit"));
+	if(((String)item.get("主键")).equals("PRI"))
+		pri.add((String)item.get("参数名"));
 }
-
+res.put("TABLE_PRI",String.join("/",pri));
 return res;
 
 }
@@ -208,7 +209,6 @@ return res;
 	
 	
 ///////////////////////////////////////////////////创建新表,tableName:表名,tableComment:存放站点id,param:元素列表,column_comment:存放元素Id,pri:存放主键
-@CrossOrigin
 @RequestMapping("test/CreateTable")
 public boolean CreateTable(@RequestBody JSONObject jsonParam)
 {
@@ -239,7 +239,6 @@ return res;
 }
 
 /////////////////////////////////////////////////删除表格操作
-@CrossOrigin
 @RequestMapping("test/deleteTable")
 public boolean deleteTable(String tableName)
 {
@@ -253,11 +252,11 @@ public boolean deleteTable(String tableName)
 }
 
 /////////////////////////////////////////////////设置数据库连接参数并测试连接
-@CrossOrigin
 @RequestMapping("/config")
 public boolean config(@RequestBody JSONObject jsonParam)
 {
 	File file=new File("./config.json");
+	JSONObject tmp=getConfig();
     if (!file.exists()) {// 判断该文件是否存在
         try {
 			file.createNewFile();
@@ -278,11 +277,35 @@ public boolean config(@RequestBody JSONObject jsonParam)
 		e.printStackTrace();
 	}// 如果是true，就是往后追加
 	System.out.println(new Date()+" || Function:config || configParams:"+jsonParam.toJSONString());
-	return db.getdb().changeParams();
+	if(db.getdb().changeParams()) return true;
+	else
+	{
+		try {
+			fileWriter = new FileWriter("./config.json");
+			fileWriter.write(tmp.toJSONString());
+			fileWriter.flush();// 刷新缓冲区的内容到文件中
+			fileWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}// 如果是true，就是往后追加
+		db.getdb().changeParams();
+		return false;
+	}
 }
 
+	///////////////////////////////////////获取数据库连接参数
+	@RequestMapping("/isFirst")
+	public boolean isFirst()
+	{
+		File file=new File("./config.json");
+		if(file.exists()) return false;
+		System.out.println(new Date()+" || Function:isFirst || tips:初次运行本程序，请配置数据库连接和云盘地址！");
+		return true;
+	}
+
 ///////////////////////////////////////获取数据库连接参数
-@CrossOrigin
+
 @RequestMapping("/getConfig")
 public JSONObject getConfig()
 {
@@ -309,7 +332,7 @@ public JSONObject getConfig()
 	return pro;
 }
 
-	
+//调试
 //	public static void main(String arg[])
 //	{
 //		String str ="{'hostName':'markchen7788.xyz:3306','userName':'cq','pwd':'cq1999','dbName':'envData'}";
@@ -327,7 +350,6 @@ public JSONObject getConfig()
 	
 
 ////////////////////////////////////////登陆操作
-@CrossOrigin
 @RequestMapping("/doLogin")
 public boolean doLogin(String userName,String pwd)
 {
@@ -347,7 +369,6 @@ public boolean doLogin(String userName,String pwd)
 
 
 ///////////////////////////////////注销操作
-@CrossOrigin
 @RequestMapping("/logout")
 public String logout() {
 	if(getUser()==null) return 	"logout";
@@ -358,8 +379,6 @@ public String logout() {
 }
 
 /////////////////////////////////////////注册操作
-
-@CrossOrigin
 @RequestMapping("/registry")
 public boolean registry(@RequestBody JSONArray jsonArray)
 {
@@ -378,7 +397,6 @@ public boolean registry(@RequestBody JSONArray jsonArray)
 }
 
 ///////////////////////////////////////////获取用户信息
-@CrossOrigin
 @RequestMapping("/test/getUser")
 public HashMap getUser()
 {
@@ -387,15 +405,15 @@ public HashMap getUser()
 }
 
 ///////////////////////////////////////////基本操作
-	@CrossOrigin
-	@RequestMapping("test/update")
+	@CrossOrigin//crossOrigin设置后，该函数可以被非同源文件请求，即无需前端和后端在同一服务器下，可以方便开发和调试
+	@RequestMapping("test/update")//基本操纵
 	public boolean update(@RequestParam String sql)
 	{
 		System.out.println(sql);
 		return  db.getdb().executeUpdate(sql);		
 	}
 	@CrossOrigin
-	@RequestMapping("test/query")
+	@RequestMapping("test/query")//基本查询
 	public List query(@RequestParam String sql)
 	{
 		System.out.println(sql);

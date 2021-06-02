@@ -50,7 +50,7 @@ public class ShiroConfiguration {
 	 * ShiroFilterFactoryBean，是个factorybean，为了生成ShiroFilter。
 	 * 它主要保持了三项数据，securityManager，filters，filterChainDefinitionManager。
 	 */
-	@Bean(name = "shiroFilter")
+	@Bean(name = "shiroFilter")//设置拦截未认证的请求
 	public ShiroFilterFactoryBean shiroFilterFactoryBean() {
 
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -58,8 +58,9 @@ public class ShiroConfiguration {
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		map.put("/**.html", "authc");
 		map.put("/", "authc");
+		map.put("/getConfig", "authc");
 		map.put("/test/**", "authc");
-		shiroFilterFactoryBean.setLoginUrl("/login.html");
+		shiroFilterFactoryBean.setLoginUrl("/login.html");//设置登录主页
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
 		return shiroFilterFactoryBean;
 	}

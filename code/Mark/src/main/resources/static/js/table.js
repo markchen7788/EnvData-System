@@ -1,4 +1,5 @@
 var update_duplicate = false;
+var lim = 15;
 layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 	var element = layui.element;
 	var table = layui.table;
@@ -10,6 +11,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 	var tableCols = {};
 	var data1;
 	var colList = [];
+	var pri='';
 	form.on('submit(formDemo)', function (data) {
 		layer.alert(JSON.stringify(data.field), {
 			title: '最终的提交信息'
@@ -17,28 +19,31 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 		return false;
 	});
 	var tableName = getQueryVariable("tableName");
-	var lim = 20;
-	var condition = { "tableName": tableName, "condition": "", "page": "0," + 20 }
+	var condition = { "tableName": tableName, "condition": "", "page": "0," + lim }
 
 
 	var unit = {};
 	var count = 20, getCount = true;
+	var index=layer.load({ time: 10 * 1000 });
 	$.ajax({
 		url: hostName + '/test/getUnit',
 		type: 'post',
 		data: { "tableName": tableName },
-		async: false,
 		success: function (res) {
-			//console.log(res)
+			console.log(res)
 			unit = res;
+			pri=res.TABLE_PRI;
+			delete res.TABLE_PRI;
+			renderThisPage(condition);
 		}
 		//…
 	});
 
-	renderThisPage(condition);
+
 	function renderThisPage(json) {
+		json['order']='Id';
 		if (getCount) json['count'] = true;
-		var load = layer.load(2, { time: 10 * 1000 });
+		//var load = layer.load(2, { time: 10 * 1000 });
 		$.ajax({
 			url: hostName + '/test/select',
 			type: 'post',
@@ -55,7 +60,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 					delete condition.count;
 				}
 				data1 = res;
-				layer.close(load);
+				layer.close(index);
 			}
 			//…
 		});
@@ -65,7 +70,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 			elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
 			, count: count //数据总数，从服务端得到
 			, limit: lim
-			, limits: [10, 20, 50, 100, 200, 300]
+			, limits: [15, 30, 50, 100, 200, 300]
 			, curr: cur
 			, first: '首页'
 			, last: '尾页'
@@ -83,7 +88,9 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 					lim = obj.limit;
 					//do something
 					condition.page = (obj.curr - 1) * obj.limit + ',' + obj.limit
+					var index=layer.load({ time: 10 * 1000 });
 					renderThisPage(condition)
+					layer.close(index);
 
 				}
 			}
@@ -92,8 +99,9 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 		//col:存放数据表格的表头
 		colList = [];//存放所有元素名
 		for (var key in unit) {//unit：json，存放”元素-元素单位“键值对。该for循环将利用unit生成数据表格的表头
-			if (key == 'Id') continue;
-			var item = { field: key, title: key + "(" + unit[key] + ")", sort: true }
+			if (key == 'Id'||key=='TABLE_PRI') continue;
+			if(unit[key]=="") var item = { field: key, title: key , sort: true }
+			else var item = { field: key, title: key + "(" + unit[key] + ")", sort: true }
 			colList.push(key);
 			col[0].push(item)
 			tableCols[key] = "";
@@ -111,10 +119,12 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 			, cols: col//数据表格表头
 			, limit: data1.length
 			, initSort: {
-				field: 'id' //排序字段，对应 cols 设定的各字段名
-				, type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+				field: 'Id' //排序字段，对应 cols 设定的各字段名
+				, type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
 			}
 		});
+		$('#tableHead').html('表名:'+tableName);
+		$('#priHead').html('主键:'+pri);
 	}
 
 
@@ -318,6 +328,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 					formType: 0,
 					title: '查询'
 				}, function (value, index, elem) {
+					condition.page="0," + 20;
 					condition.condition = value;
 					renderThisPage(condition);
 					layer.close(index);

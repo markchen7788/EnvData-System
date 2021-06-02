@@ -25,7 +25,7 @@ public class db {//用于连接数据库的类
 	Statement s; 
 	ResultSet rs;
 	List res;//结果列表
-	String driverName="com.mysql.jdbc.Driver";;
+	String driverName="com.mysql.jdbc.Driver";
 	String userName="";
 	String userPasswd="";
 	String Host="";
@@ -44,11 +44,11 @@ public class db {//用于连接数据库的类
 		{
 			Class.forName(driverName);
 		}catch(ClassNotFoundException e)
-		{System.out.print("Error loading Driver,不能加载驱动程序！");}
+		{System.out.println("Error loading Driver,不能加载驱动程序！");}
 		changeParams();
 
 	}
-	public boolean changeParams()
+	public boolean changeParams()//读取配置文件（config.json)中的数据库连接信息
 	{
 		File file=new File("./config.json");
 		if(!file.exists()) return false;
@@ -74,11 +74,11 @@ public class db {//用于连接数据库的类
 		this.Host=pro.getString("hostName");
 		this.dbName=pro.getString("dbName");
 		boolean res=connect();
-		closeCon();
+		if(con!=null)closeCon();
 		return res;
 	   
 	}
-	private boolean connect()
+	private boolean connect()//连接数据库
 	{
 		properties.put("remarkdReporting", "true");
 		properties.put("user", userName);
@@ -89,7 +89,7 @@ public class db {//用于连接数据库的类
 			con=DriverManager.getConnection(url,properties);
 		}
 		catch(SQLException er)
-		{System.out.print("Error getConnection,不能连接数据库！");return false;}
+		{System.out.println("Error getConnection,不能连接数据库！");return false;}
 		return true;
 	}
 	/*
@@ -175,7 +175,7 @@ public class db {//用于连接数据库的类
  		return true;
  	}
  	
- 	public  static List convertList(ResultSet rs) throws SQLException {
+ 	public  static List convertList(ResultSet rs) throws SQLException {//将resultset转换成list<HashMap>
 
  	    List list = new ArrayList();
  	    ResultSetMetaData md = rs.getMetaData();
@@ -189,10 +189,11 @@ public class db {//用于连接数据库的类
  	    }
  	    return list;
  	}
-public static void main(String arg[])
-{
-
-	System.out.print(db.getdb());
-}
-	
+ 	//调试函数
+//public static void main(String arg[])
+//{
+//
+//	System.out.print(db.getdb());
+//}
+//
 }

@@ -1,4 +1,16 @@
 RandomBg();
+$.ajax({
+  url: hostName + '/isFirst',
+  type: 'get',
+  async: false,
+  success: function (res) {
+    if (res) {
+      settings();
+    }
+  }
+  //…
+});
+
 $(".card.alt .toggle ").on("click", function () {
   // $("#formContent").html($("#form1").html());
   $(".container").stop().addClass("active");
@@ -6,6 +18,7 @@ $(".card.alt .toggle ").on("click", function () {
 $(".close").on("click", function () {
   $(".container").stop().removeClass("active");
 });
+
 $("#login").click(function () {
 
   // alert('login');
@@ -26,55 +39,12 @@ $("#login").click(function () {
 
 });
 
-$("#registry").click(function () {
-  $("#formContent").html($("#form1").html());
-});
-
-$("#config").click(function () {
-  $("#formContent").html($("#form2").html());
-  $.ajax({
-    url: hostName + '/getConfig',
-    type: 'get',
-    async: false,
-    success: function (res) {
-//      console.log(res)
-      configForm.hostName.value = res.hostName;
-      configForm.userName.value = res.userName;
-      configForm.pwd.value = res.pwd;
-      configForm.dbName.value = res.dbName;
-    }
-    //…
-  });
-});
-
-function saveConfig() {
-  var data = {};
-  data['hostName'] = configForm.hostName.value;
-  data['userName'] = configForm.userName.value;
-  data['pwd'] = configForm.pwd.value;
-  data['dbName'] = configForm.dbName.value;
-  $.ajax({
-    url: hostName + '/config',
-    type: 'post',
-    data: JSON.stringify(data),
-    dataType: "json",
-    contentType: "application/json",
-    async: false,
-    success: function (res) {
-      if (res == true) alert("成功配置数据库！")
-      else alert("配置失败！")
-      location.reload();
-    }
-    //…
-  });
-  location.reload();
-};
 
 function chooseAdress() {
   layui.use(['form', 'jquery', 'layer'], function () {
     var form = layui.form;
     var layer = layui.layer;
-  //  const $ = layui.jquery;
+    //  const $ = layui.jquery;
     function getFirstAttr(obj) {
       for (var k in obj) return k;
     }
@@ -115,22 +85,21 @@ function chooseAdress() {
       area: ['250px', '400px'],
       content: $("#adress").html(),
       btn: ['确定'],
-      yes: function(index, layero){
+      yes: function (index, layero) {
         //按钮【按钮一】的回调
 
-				var tmp=[chooseAddr.province.value,chooseAddr.city.value,chooseAddr.area.value],tmp2=[];
-				for(var i in tmp)
-				{
-					if(tmp[i]!="全部")
-					tmp2.push(tmp[i]);
-				}
+        var tmp = [chooseAddr.province.value, chooseAddr.city.value, chooseAddr.area.value], tmp2 = [];
+        for (var i in tmp) {
+          if (tmp[i] != "全部")
+            tmp2.push(tmp[i]);
+        }
 
-        registry.district.value= tmp2.join("-");
+        registry.district.value = tmp2.join("-");
         layer.close(index);
       },
       success: function (layero, index) {
         form.render('select');
-        selectOption('湖北省',getFirstAttr(adress['湖北省']));
+        selectOption('湖北省', getFirstAttr(adress['湖北省']));
       }
     });
     layer.style(addLayer, {
@@ -139,10 +108,9 @@ function chooseAdress() {
   });
 }
 
-function addUser()
-{
-  // alert('sss');
-  var data=[{"userName":registry.userName.value,"pwd":registry.pwd.value,"area":registry.district.value}];
+function addUser() {
+  //alert('sss');
+  var data = [{ "userName": registry.userName.value, "pwd": registry.pwd.value, "area": registry.district.value }];
   $.ajax({
     url: hostName + '/registry',
     type: 'post',
@@ -158,6 +126,55 @@ function addUser()
       else alert("注册失败！")
     }
     //…
+  });
+
+}
+
+layui.use(['form', 'jquery'], function () {
+  const $ = layui.jquery;
+  var form = layui.form;
+  form.on('submit(formDemo)', function (data) {
+    $.ajax({
+      url: hostName + '/config',
+      type: 'post',
+      data: JSON.stringify(data.field),
+      dataType: "json",
+      contentType: "application/json",
+      success: function (res) {
+        if (res == true) layer.msg("成功配置数据库！")
+        else layer.msg("配置失败！")
+      }
+      //…
+    });
+    return false;
+  });
+});
+function settings() {
+  layui.use(['form', 'jquery', 'layer'], function () {
+    var form = layui.form;
+    const $ = layui.jquery;
+    var res;
+    $.ajax({
+      url: hostName + '/getConfig',
+      type: 'get',
+      async: false,
+      success: function (data) {
+        res=data;
+      }
+    });
+    layer.open({
+      type: 1,
+      title: '请配置系统数据库和云盘地址',
+      offset: 'auto',
+      area: ['500px', '600px'],
+      shadeClose: true,
+      shade: 0, //遮罩透明度
+      content: $('#configForm').html(), //这里content是一个普通的String
+      success: function () { form.val("configForm", res);form.render('select'); form.render('checkbox'); },
+      cancel: function (index, layero) {
+        //window.location.reload();
+      }
+    });
   });
 
 }

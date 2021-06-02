@@ -3,7 +3,7 @@ layui.use(['table', 'jquery'], function () {
     const $ = layui.jquery;
     var data1 = data1;
 
-    // var load = layer.load(2, { time: 10 * 1000 });
+    var load = layer.load({ time: 10 * 1000 });
     $.ajax({
         url: hostName + '/test/getStatistics',
         type: 'post',
@@ -29,7 +29,7 @@ layui.use(['table', 'jquery'], function () {
                 , cols: col
             });
 
-            // layer.close(load);
+            layer.close(load);
         }
         //…
     });

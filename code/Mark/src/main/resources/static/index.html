@@ -5,22 +5,29 @@
   <meta charset="utf-8">
   <title>可动态扩展的环境监测数据管理系统</title>
   <link rel="stylesheet" href="./res/layui/css/layui.css">
-  <style>
-    .my-background {
-      position: fixed;
-      height: 100%;
-      width: 100%;
-      background-image: url("./res/index_bg4.jpg");
-    }
-
-    .my-opacity {
-      opacity: 0.7;
-    }
+  <style id="bg">
+    html {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+        }
+    /* body {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            background: url("./res/index_bg4.jpg") no-repeat 0px 0px;
+            background-size: cover;
+            background-attachment: fixed;
+            opacity: 0.9;
+        } */
+  /* body {
+    background:url(./res/index_bg7.jpg) top left;background-size:100%;
+  } */
   </style>
 </head>
 <script src="./js/func.js"></script>
 
-<body class="my-background">
+<body style="background:url(./res/index_bg7.jpg) top left;background-size:100%;">
   <div class="layui-layout layui-layout-admin">
     <div class="layui-header my-opacity ">
       <div class="layui-logo"><a href="javascript:changeBg()">
@@ -49,7 +56,7 @@
           </dl>
         </li>
         <li class="layui-nav-item">
-          <a href="http://markchen7788.xyz/fileManager/">
+          <a id="netDisk" href="https://pan.baidu.com/" target="_blank">
             <img src="./res/dir.jpeg" class="layui-nav-img">
             文件管理
           </a>
@@ -61,6 +68,7 @@
           </a>
           <dl class="layui-nav-child">
             <dd><a href="javascript:addLay()">基本资料</a></dd>
+            <div id="settings"></div> 
             <dd><a href="javascript:logout()">退出系统</a></dd>
           </dl>
         </li>
@@ -118,6 +126,52 @@
     </div>
     </div>
   </form>
+  </script>
+  <script id="configForm">
+    <form class="layui-form layui-form-pane" style="padding: 20px;" lay-filter="configForm" name="configForm">
+      <div class="layui-form-item">
+        <label class="layui-form-label">主机名</label>
+        <div class="layui-input-block">
+          <input type="text" name="hostName" required lay-verify="required" placeholder="请输入主机名" autocomplete="off"
+            class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+          <input type="text" name="userName" required lay-verify="required" placeholder="请输入用户名" autocomplete="off"
+            class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+          <input name="pwd" type="password" required lay-verify="required" placeholder="请输入数据库密码" autocomplete="off"
+            class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">数据库名</label>
+        <div class="layui-input-block">
+          <input type="text" name="dbName" required lay-verify="required" placeholder="请输入数据库名" autocomplete="off"
+            class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">网盘地址</label>
+        <div class="layui-input-block">
+          <input type="text" name="netDisk" required lay-verify="required" placeholder="请输入网盘地址" autocomplete="off"
+            class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+          <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+      </div>
+    </form>
   </script>
   <script src="./js/adress.js"></script>
   <script src="./res/layui/layui.js"></script>

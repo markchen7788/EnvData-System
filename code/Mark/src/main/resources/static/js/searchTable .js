@@ -1,3 +1,4 @@
+var curArea=[];
 layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 	var element = layui.element;
 	var laypage = layui.laypage;
@@ -13,11 +14,11 @@ layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 	$.ajax({
 		url: hostName + '/test/getUser',
 		type: 'get',
-		async: false,
 		success: function (res) {
 			res.area;
 			var data = form.val('queryForm');
 			data.area = res.area;
+			curArea=res.area.split('-');
 			form.val('queryForm', data);
 			updateCurrentPage(data.area,"1");
 		}
@@ -25,7 +26,7 @@ layui.use(['element', 'jquery', 'laytpl', 'form', 'laypage'], function () {
 	});
 	function updateCurrentPage(con, page) {
 		var condition = { "tableName":"col","condition": con };
-		var load = layer.load(2, { time: 10 * 1000 });
+		var load = layer.load({ time: 10 * 1000 });
 		$.ajax({
 			url: hostName + '/test/select',
 			type: 'post',
@@ -149,6 +150,7 @@ function chooseAdress(tableName) {
 					if(tmp[i]!="全部")
 					tmp2.push(tmp[i]);
 				}
+				curArea=tmp2;
 				data.area = tmp2.join("-");
 				form.val(tableName, data);
 				if (tableName == 'queryForm') {
@@ -159,7 +161,28 @@ function chooseAdress(tableName) {
 			},
 			success: function (layero, index) {
 				form.render('select');
-				selectOption('湖北省', getFirstAttr(adress['湖北省']));
+				switch(curArea.length)
+				{
+					case 0:
+						selectOption('全部', '全部');
+						break;
+					case 1:
+						selectOption(curArea[0],'全部');
+						break;
+					case 2:
+						selectOption(curArea[0],curArea[1]);
+						var data=form.val('chooseAddr');
+						data['area']='全部'
+						form.val('chooseAddr',data);
+						break;
+					case 3:
+						selectOption(curArea[0], curArea[1]);
+						var data=form.val('chooseAddr');
+						data['area']=curArea[2];
+						form.val('chooseAddr',data);
+						break;
+				}
+
 			}
 		});
 		layer.style(addLayer, {

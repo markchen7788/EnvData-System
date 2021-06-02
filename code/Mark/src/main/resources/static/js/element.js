@@ -8,7 +8,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl'], function () {
 	var tableCols = {};
 	var data1;
 	function renderThisPage(json) {
-		var load = layer.load(2, { time: 10 * 1000 });
+		var load = layer.load({ time: 10 * 1000 });
 		$.ajax({
 			url: hostName + '/test/select',
 			type: 'post',
@@ -43,7 +43,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl'], function () {
 			, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
 			, defaultToolbar: ['filter', 'print']
 			, cols: col
-			, page: { limit: 18 }
+			, page: { limit: 15, limits: [15, 30, 50, 100, 200, 300] }
 			,initSort: {
 				field: 'id' //排序字段，对应 cols 设定的各字段名
 				,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
