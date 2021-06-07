@@ -3,52 +3,49 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>商品</title>
+	<title>可动态扩展的环境监测数据管理系统</title>
 	<link rel="stylesheet" href="./res/layui/css/layui.css">
 </head>
 <script src="./res/layui/layui.js"></script>
 <script src="./js/func.js"></script>
 <script src="./js/xlsxToJson.js"></script>
 <style>
+	.page {
+		background-color: rgba(255, 255, 255);
+		width: 100%;
+		position: fixed;
+		bottom: 0;
+	}
+
 	.layui-laypage-mark {
-		opacity: 0.8;
+		margin-bottom: 0px;
+		margin-left: 10px;
+		padding: 0px;
+		background-color: rgba(255, 255, 255);
 	}
 </style>
 
-<body style="padding: 10px;" class="layui-main">
+<body>
 
 	<b>
-		<div class="layui-panel layui-bg-gray" style="opacity: 0.9;padding: 20px;">
+		<div class="layui-panel layui-bg-gray layui-row" style="background-color: rgba(255,255,255,0.5);">
 			<input type="file" class="layui-hide" id="upload" onchange="change(this,getXlsxJson)" style="width: 320px;"
 				accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 			<form class="layui-form" lay-filter='queryForm' action="">
 				<div class="layui-row">
-					<div class="layui-col-md1" style="padding: 2px;">
-						<button type="button" class="layui-btn layui-btn-fluid layui-btn-primary" title="返回"
-							onclick="window.history.back()">
-							<i class="layui-icon">&#xe65c;</i>
-						</button>
-					</div>
-					<div class="layui-col-md1" style="padding: 2px;">
-						<button type="button" class="layui-btn layui-btn-fluid  layui-btn-primary" title="刷新"
-							onclick="window.location.reload()">
-							<i class="layui-icon">&#xe669;</i>
-						</button>
-					</div>
-					<div class="layui-col-md2" style="padding: 2px;" onclick="chooseAdress('queryForm')">
-						<input type="text" name="area" placeholder="请选择地区" autocomplete="off" class="layui-input"
+					<div class="layui-col-md2" style="padding: 2px;">
+						<input type="text" name="area" placeholder="全国" title="当前地区" autocomplete="off" class="layui-input"
 							disabled>
 					</div>
-					<div class="layui-col-md4" style="padding: 2px;">
-						<input type="text" name="condition" placeholder="查询" autocomplete="off" class="layui-input">
+					<div class="layui-col-md6" style="padding: 2px;">
+						<input type="text" name="condition" placeholder="查询环境监测站点" autocomplete="off" class="layui-input">
 					</div>
-
 					<div class="layui-col-md1" style="padding: 2px;">
 						<button class="layui-btn  layui-btn-primary layui-btn-fluid" id="submitQuery" lay-submit
 							lay-filter="formDemo" title="查询"><i class="layui-icon layui-icon-search"></i></button>
 					</div>
 					<div class="layui-col-md1" style="padding: 2px;">
-						<button class="layui-btn  layui-btn-primary layui-btn-fluid" type="button" onclick="addTable()"
+						<button class="layui-btn  layui-btn-primary layui-btn-fluid" type="button" onclick="addTable(-1)"
 							title="新建"><i class="layui-icon layui-icon-add-1"></i></button>
 					</div>
 					<div class="layui-col-md1" style="padding: 2px;">
@@ -60,96 +57,60 @@
 						<button class="layui-btn layui-btn-fluid layui-btn-primary" type="button" Id="export"
 							title="导出"><i class="layui-icon layui-icon-export"></i></button>
 					</div>
-
 				</div>
 			</form>
 		</div>
-		<div class="layui-panel layui-bg-gray" style="opacity: 0.9;padding: 20px;">
-			<div id="card">
-				<div class="layui-card">
-					<div class="layui-card-header layui-bg-green">00001
-						<div class="layui-layout-right">
 
-						</div>
-					</div>
-					<div class="layui-card-body">
+		<div id="card"></div>
 
-						<table class="layui-table">
-							<colgroup>
-								<col width="20%">
-								<col width="80%">
-							</colgroup>
-							<tbody>
-								<tr>
-									<td>Id</td>
-									<td>2016-11-29</td>
-								</tr>
-								<tr>
-									<td>备注</td>
-									<td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-								</tr>
-							</tbody>
-						</table>
-						<hr class="layui-border-green">
-
-						<a href="create_table.html?Id={{i}}"><i class="layui-icon layui-icon-edit"
-								style="color: #FFB800;">修改</i></a>&nbsp;&nbsp;
-						<a href="javascript:deleteTable('{{i}}','{{d[i][0]}}')"><i class="layui-icon layui-icon-delete"
-								style="color: #FFB800;">删除</i></a>
-					</div>
-				</div>
-			</div>
-
-		</div>
-
-
-		<div class="layui-panel layui-bg-gray" style="opacity: 0.9;padding: 20px;">
+		<div class="page">
 			<div id="test2"></div>
 		</div>
-		</div>
+
 	</b>
 
 
 	<script id="demo" type="text/html">
+		
 		{{# 
 			for(var i in d){ 
-		}}
-		<div class="layui-card" >
-			<div class="layui-card-header layui-bg-green">{{d[i].siteName}}
-				<div class="layui-layout-right">
-
+		}}<b>
+		<div class="layui-collapse" lay-accordion style="border: 0px;border-bottom: 1px;">
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title layui-bg-green" style="border: 0px;">
+				<i class="layui-icon layui-icon-home" style="font-size: 15px;"></i>&nbsp;{{d[i].siteName}}	
+				</h2>
+				<div class="layui-colla-content  layui-bg-gray">
+	
+					<table class="layui-table" lay-size="sm">
+						<colgroup>
+							<col width="20%">
+							<col width="80%">
+						</colgroup>
+						<tbody>
+							<tr>
+								<td><b><i class="layui-icon layui-icon-star" style="font-size: 13px;"></i>&nbsp;站点编号</b></td>
+								<td><b>{{d[i].Id}}</b></td>
+							</tr>
+							<tr>
+								<td><b><i class="layui-icon layui-icon-location" style="font-size: 13px;"></i>&nbsp;所属地区</b></td>
+								<td><b>{{d[i].area}}</b></td>
+							</tr>
+							<tr>
+								<td><b><i class="layui-icon layui-icon-form" style="font-size: 13px;"></i>&nbsp;站点备注</b></td>
+								<td><b>{{d[i].comment}}</b></td>
+							</tr>
+						</tbody>
+					</table>
+					<hr class="layui-border-green">
+	
+					<a href="javascript:addTable({{i}})"><i class="layui-icon layui-icon-edit"
+							style="color: #FFB800;">修改</i></a>&nbsp;&nbsp;
+					<a href="javascript:deleteTable({{d[i].Id}})"><i class="layui-icon layui-icon-delete"
+							style="color: #FFB800;">删除</i></a>
 				</div>
 			</div>
-			<div class="layui-card-body">
-			
-				<table class="layui-table" lay-size="sm">  
-					<colgroup>
-					<col width="20%">
-					<col width="80%">
-				  </colgroup>
-					<tbody>
-					<tr>
-						<td>{{'Id'}}</td>
-						<td>{{d[i].Id}}</td>
-					</tr>
-					<tr>
-						<td>{{'地区'}}</td>
-						<td>{{d[i].area}}</td>
-					</tr>
-					<tr>
-						<td>{{'备注'}}</td>
-						<td class="td-height" height="{{240/d[0].md}}px">{{d[i].comment}}</td>
-					</tr>
-					</tbody>
-				  </table>
-				<hr class="layui-border-green">
-
-				<a href="javascript:addTable({{i}})"><i class="layui-icon layui-icon-edit"
-						style="color: #FFB800;">修改</i></a>&nbsp;&nbsp;
-				<a href="javascript:deleteTable({{d[i].Id}})"><i class="layui-icon layui-icon-delete"
-						style="color: #FFB800;">删除</i></a>
-			</div>
-	</div>
+		</div></b>
 	{{# } }}
 	</script>
 	<script id="adress" type="text/html">

@@ -3,33 +3,31 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>商品</title>
+	<title>可动态扩展的环境监测数据管理系统</title>
 	<link rel="stylesheet" href="./res/layui/css/layui.css">
+	<style>
+		.layui-table-page {
+			z-index: 99999;
+			position: fixed;
+			bottom: 0;
+		}
+	</style>
 </head>
 <script src="./res/layui/layui.js"></script>
 <script src="./js/data.js"></script>
 <script src="./js/func.js"></script>
 <script src="./js/xlsxToJson.js"></script>
 
-<body style="padding: 20px;" class="layui-main">
+<body class="layui-bg-gray">
 	<b>
-		<div class="layui-panel layui-bg-gray" style="opacity: 0.9;">
-			<table class="layui-hide" lay-skin="row" lay-filter="test" id="test"></table>
-		</div>
+
+		<table class="layui-hide" lay-skin="row" lay-filter="test" id="test"></table>
+
 		<input type="file" class="layui-hide" id="upload" onchange="change(this,getXlsxJson)" style="width: 320px;"
 			accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 
 		<script type="text/html" id="toolbarDemo">
 			<div class="layui-btn-container layui-table-tool-temp">
-				<div id="restore" class="layui-hide" lay-event="restore" title="退出全屏">
-					<i class="layui-icon layui-icon-screen-restore"></i>
-				</div>
-				<div id="full" class="layui-inline" lay-event="full" title="全屏">
-					<i class="layui-icon layui-icon-screen-full"></i>
-				</div>
-				<div class="layui-inline" lay-event="return" title="返回上一页">
-					<i class="layui-icon layui-icon-return"></i>
-				</div>
 				<div class="layui-inline" lay-event="reload" title="刷新">
 					<i class="layui-icon layui-icon-refresh-3"></i>
 				</div>
@@ -75,8 +73,8 @@
 					for(var i in colNameJson){ if(i=='Id') continue;
 				}}
 						<tr>
-							<td>{{i}}</td>
-							<td><input type="text"  value="{{d[i]}}"  name="{{i}}" placeholder="{{i}}" autocomplete="off" class="layui-input"></td>
+							<td>{{colNameJson[i]}}</td>
+							<td><input type="text"  value="{{d[i]}}"  name="{{i}}" placeholder="{{colNameJson[i]}}" autocomplete="off" class="layui-input"></td>
 						</tr>
 				{{# } }}
 					</tbody>

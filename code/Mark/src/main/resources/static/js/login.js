@@ -1,4 +1,8 @@
 RandomBg();
+layui.use("element", function () {
+  document.getElementById("timeNow").innerHTML="&nbsp;"+new Date();
+  var element = layui.element;
+});
 $.ajax({
   url: hostName + '/isFirst',
   type: 'get',
@@ -159,7 +163,7 @@ function settings() {
       type: 'get',
       async: false,
       success: function (data) {
-        res=data;
+        res = data;
       }
     });
     layer.open({
@@ -170,11 +174,38 @@ function settings() {
       shadeClose: true,
       shade: 0, //遮罩透明度
       content: $('#configForm').html(), //这里content是一个普通的String
-      success: function () { form.val("configForm", res);form.render('select'); form.render('checkbox'); },
+      success: function () { form.val("configForm", res); form.render('select'); form.render('checkbox'); },
       cancel: function (index, layero) {
         //window.location.reload();
       }
     });
   });
 
+}
+
+
+function personInfo()
+{
+	layui.use("layer",function()
+	{
+		//document.getElementById("")
+		layer.open({
+      title:'开发者信息',
+			type: 1, 
+			content: document.getElementById("personInfo").innerHTML
+		  });
+	})
+}
+function Introduction()
+{
+	layui.use("layer",function()
+	{
+		//document.getElementById("")
+		layer.open({
+      title:"产品说明",
+      type: 2, 
+	  area:["550px","630px"],
+      content: './Introduction.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+    }); 
+	})
 }

@@ -8,8 +8,9 @@ layui.use(['element', 'table', 'jquery'], function () {
 		updataForm(data.field.condition)
 		return false;
 	});
-	updataForm("")
+	//updataForm("")
 	function updataForm(condition) {
+		if (curTableName == 'site') condition += "&&" + getQueryVariable("area");
 		var load = layer.load(2, { time: 10 * 1000 });
 		$.ajax({
 			url: hostName + '/test/select',
@@ -53,7 +54,7 @@ layui.use(['element', 'table', 'jquery'], function () {
 						form.val("formTest", { "siteId": data[0].Id })
 					}
 				} else {
-					ele=removeRepeat(ele, data)
+					ele = removeRepeat(ele, data)
 					renderPri(ele);
 				}
 				break;
@@ -148,15 +149,16 @@ layui.use(['element', 'table', 'jquery'], function () {
 	});
 	form.on('submit(save)', function (data) {
 		//console.log(ele);
-		var json = { "tableName": data.field.tableName,"tableComment": data.field.tableComment, "siteId": data.field.siteId, "param": ele, "pri": '' };
+		var json = { "tableName": data.field.tableName, "tableComment": data.field.tableComment, "siteId": data.field.siteId, "param": ele };
 		delete data.field.siteId;
 		delete data.field.tableName;
-		delete data.field.tableComment; 
+		delete data.field.tableComment;
 		var tmp = [];
 		for (var key in data.field) {
 			tmp.push(key);
 		}
-		json.pri = "`" + tmp.join('`,`') + "`";
+		if (tmp.length > 0)
+			json["pri"] = "`" + tmp.join('`,`') + "`";
 		//console.log(json);
 		var load = layer.load(2, { time: 10 * 1000 });
 		$.ajax({
@@ -167,7 +169,10 @@ layui.use(['element', 'table', 'jquery'], function () {
 			contentType: "application/json",
 			success: function (res) {
 
-				if (res == true) layer.msg("添加成功！")
+				if (res == true) {
+					layer.msg("添加成功！")
+					window.top.location = "/";
+				}
 				else layer.msg("添加失败！")
 				layer.close(load);
 			}

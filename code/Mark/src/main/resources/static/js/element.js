@@ -44,15 +44,11 @@ layui.use(['element', 'table', 'jquery', 'laytpl'], function () {
 			, defaultToolbar: ['filter', 'print']
 			, cols: col
 			, page: { limit: 15, limits: [15, 30, 50, 100, 200, 300] }
-			,initSort: {
-				field: 'id' //排序字段，对应 cols 设定的各字段名
-				,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
-			  }
 		});
 
 	}
 
-	renderThisPage({ "tableName": "element", "condition": "" });
+	renderThisPage({ "tableName": "element", "condition": "","order":"Id"});
 
 	form.on('submit(saveElementInfo)', function (data) {
 		var load = layer.load(2, { time: 10 * 1000 });
@@ -112,19 +108,6 @@ layui.use(['element', 'table', 'jquery', 'laytpl'], function () {
 				break;
 			case 'export':
 				exportToExcel(data1);
-				break;
-			case 'return':
-				window.history.back();
-				break;
-			case 'full':
-				$("body").attr('class', '');
-				$("#restore").attr('class', 'layui-inline');
-				$("#full").attr('class', 'layui-hide');
-				break;
-			case 'restore':
-				$("body").attr('class', 'layui-main');
-				$("#full").attr('class', 'layui-inline');
-				$("#restore").attr('class', 'layui-hide');
 				break;
 			case 'multiDelete':
 				var data = checkStatus.data;

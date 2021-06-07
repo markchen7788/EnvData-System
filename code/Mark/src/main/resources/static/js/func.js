@@ -9,7 +9,7 @@ function RandomBg() {
 }
 function createStyle(num) {
 
-    return "background:url(./res/index_bg" + num + ".jpg) top left;background-size:100%; margin: 0px;padding: 0px;height: 100%;"
+    return "background:url(./res/index_bg" + num + ".jpg) top left;background-size:100%; margin: 0px;padding: 0px;height: 100%;overflow-y: hidden;opacity:0.9;"
 }
 function changeBg() {
     current_bg_num++;
@@ -44,7 +44,7 @@ function dateFormat(fmt, date) {
         "d+": date.getDate().toString(),            // 日
         "H+": date.getHours().toString(),           // 时
         "M+": date.getMinutes().toString(),         // 分
-        "S+": date.getSeconds().toString()          // 秒
+        "S+": date.getSeconds().toString(),          // 秒
         // 有其他格式化字符需求可以继续添加，必须转化成字符串
     };
     for (let k in opt) {

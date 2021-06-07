@@ -1,16 +1,23 @@
 var user = {};
+var tableOrStation = "./searchTable.html";
 RandomBg();
+//document.getElementById("layuiBody").style.height=document.body.style.height-44;
 layui.use(['element', 'jquery', 'form'], function () {
 	var element = layui.element;
 	var form = layui.form;
 	const $ = layui.jquery;
+	var laytpl = layui.laytpl;
+	$("#timeNow").html(new Date() + "&nbsp;&nbsp;&nbsp;");
 	$.ajax({
 		url: hostName + '/test/getUser',
 		type: 'get',
+		async: false,
 		success: function (res) {
 			user = res;
 			$("#userName").html('<img src="./res/profile.jpeg" class="layui-nav-img">' + res.userName);
-			if (res.userName == 'admin') $("#settings").html('<dd><a href="javascript:settings()">系统设置</a></dd>');
+			changeWindow(res.area, 0);//一进入首页就显示所有能够查看到的表格
+			renderSideNav(res.area, "col");
+			if (res.userName == 'admin') $("#settings").html('<dd><a href="javascript:settings()"><i class="layui-icon layui-icon-set"></i>&nbsp;系统设置</a></dd>');
 		}
 		//…
 	});
@@ -22,6 +29,37 @@ layui.use(['element', 'jquery', 'form'], function () {
 		}
 		//…
 	});
+
+	// // //////////////////
+	// var res = [{ "area": "陕西省-宝鸡市-渭滨区" }, { "area": "陕西省-铜川市-耀州区" }, { "area": "陕西省-咸阳市-秦都区" }, { "area": "陕西省-西安市-未央区" }];
+	// var treeItem = {};
+	// for (var i in res) {
+	// 	var _res = res[i].area.split("-");
+	// 	if (!treeItem.hasOwnProperty(_res[0]))
+	// 		treeItem[_res[0]] = {};
+	// 	if (!treeItem[_res[0]].hasOwnProperty(_res[1]))
+	// 		treeItem[_res[0]][_res[1]] = {};
+	// 	if (!treeItem[_res[0]][_res[1]].hasOwnProperty(_res[2]))
+	// 		treeItem[_res[0]][_res[1]][_res[2]] = res[i].area;
+
+	// }
+	// // layer.msg(JSON.stringify(treeItem));
+	// var getTpl = $("#navDemo").html();
+	// laytpl(getTpl).render(treeItem, function (html) {
+	// 	// document.getElementById('allTable').innerHTML= html;
+	// 	$("#myNav").html(html);
+	// 	element.render('nav');
+
+	// });
+	// $("#settings").html('<dd><a href="javascript:settings()"><i class="layui-icon layui-icon-set"></i>&nbsp;系统设置</a></dd>');
+
+	// //$("#myNav").html($("#navDemo2").html());
+
+
+	// ////////////////////////
+
+
+
 	form.on('submit(formDemo)', function (data) {
 		$.ajax({
 			url: hostName + '/config',
@@ -41,6 +79,50 @@ layui.use(['element', 'jquery', 'form'], function () {
 
 });
 
+//////////////////////////////////////根据用户所在区域和表名刷新左侧导航栏
+function renderSideNav(area, tableName) {
+	layui.use(['element', 'jquery', 'form'], function () {
+		var element = layui.element;
+		var form = layui.form;
+		const $ = layui.jquery;
+		var laytpl = layui.laytpl;
+		$.ajax({
+			url: hostName + '/test/getArea',
+			data: { "area": area, "tableName": tableName },
+			type: 'get',
+			success: function (res) {
+				// console.log(res);
+				var treeItem = {};
+				for (var i in res) {
+					var _res = res[i].area.split("-");
+					if (!treeItem.hasOwnProperty(_res[0]))
+						treeItem[_res[0]] = {};
+					if (!treeItem[_res[0]].hasOwnProperty(_res[1]))
+						treeItem[_res[0]][_res[1]] = {};
+					if (!treeItem[_res[0]][_res[1]].hasOwnProperty(_res[2]))
+						treeItem[_res[0]][_res[1]][_res[2]] = res[i].area;
+
+				}
+				// layer.msg(JSON.stringify(treeItem));
+				var getTpl = $("#navDemo").html();
+				laytpl(getTpl).render(treeItem, function (html) {
+					// document.getElementById('allTable').innerHTML= html;
+					$("#myNav").html(html);
+					element.render('nav');
+
+				});
+
+				//if (res.length > 0) changeWindow("searchTable.html?area=" + res[0].area,0);//一进入首页就显示第一个行政区能够查看到的表格
+
+			}
+			//…
+		});
+	});
+}
+
+
+
+
 function addLay() {
 	layui.use(['element', 'jquery', 'laytpl', 'form', 'table'], function () {
 		var element = layui.element;
@@ -52,7 +134,6 @@ function addLay() {
 		laytpl(html).render(user, function (res) {
 			html = res;
 		});
-		console.log(html);
 		var addLayer = layer.open({
 			type: 1,
 			title: '用户信息',
@@ -111,11 +192,32 @@ function logout() {
 		});
 	});
 }
-function changeWindow(website) {
+function changeToStation() {
+	tableOrStation = "./site.html";
+	renderSideNav(user.area, "site");
+	changeWindow(user.area, 0);
+}
+
+function changeWindow(website, choice) {
 	layui.use(['element', 'jquery'], function () {
 		var element = layui.element;
 		const $ = layui.jquery;
-		$("#frame").attr("src", website);
+		switch (choice) {
+			case 0:
+				$("#frame").attr("src", tableOrStation + '?area=' + website);
+				break;
+			case 1:
+				$("#myNav").html($("#navDemo2").html());
+				$("#frame").attr("src", website);
+				break;
+			case 2:
+				$("#myNav").html($("#navDemo2").html());
+				$("#frame").attr("src", website + "?area=" + user.area);
+				break;
+			default:
+				$("#frame").attr("src", website);
+				break;
+		}
 	});
 
 }
@@ -180,7 +282,31 @@ function chooseAdress(tableName) {
 			},
 			success: function (layero, index) {
 				form.render('select');
-				selectOption('湖北省', getFirstAttr(adress['湖北省']));
+				var curArea = form.val(tableName).area.split("-");
+				//console.log(curArea)
+				if (curArea == "") selectOption('全部', '全部');
+				else {
+					switch (curArea.length) {
+						case 0:
+							selectOption('全部', '全部');
+							break;
+						case 1:
+							selectOption(curArea[0], '全部');
+							break;
+						case 2:
+							selectOption(curArea[0], curArea[1]);
+							var data = form.val('chooseAddr');
+							data['area'] = '全部'
+							form.val('chooseAddr', data);
+							break;
+						case 3:
+							selectOption(curArea[0], curArea[1]);
+							var data = form.val('chooseAddr');
+							data['area'] = curArea[2];
+							form.val('chooseAddr', data);
+							break;
+					}
+				}
 			}
 		});
 		layer.style(addLayer, {
@@ -217,4 +343,18 @@ function settings() {
 		});
 	});
 
+}
+
+function Introduction()
+{
+	layui.use("layer",function()
+	{
+		//document.getElementById("")
+		layer.open({
+      title:"产品说明",
+      type: 2, 
+	  area:["550px","630px"],
+      content: './Introduction.html' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+    }); 
+	})
 }

@@ -11,7 +11,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 	var tableCols = {};
 	var data1;
 	var colList = [];
-	var pri='';
+	var pri = '';
 	form.on('submit(formDemo)', function (data) {
 		layer.alert(JSON.stringify(data.field), {
 			title: '最终的提交信息'
@@ -19,20 +19,20 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 		return false;
 	});
 	var tableName = getQueryVariable("tableName");
-	var condition = { "tableName": tableName, "condition": "", "page": "0," + lim }
+	var condition = { "tableName": tableName, "condition": "", "page": "0," + lim, "order": "Id&&ASC" }
 
 
 	var unit = {};
 	var count = 20, getCount = true;
-	var index=layer.load({ time: 10 * 1000 });
+	var index = layer.load({ time: 10 * 1000 });
 	$.ajax({
 		url: hostName + '/test/getUnit',
 		type: 'post',
 		data: { "tableName": tableName },
 		success: function (res) {
-			console.log(res)
+			//console.log(res)
 			unit = res;
-			pri=res.TABLE_PRI;
+			pri = res.TABLE_PRI;
 			delete res.TABLE_PRI;
 			renderThisPage(condition);
 		}
@@ -41,7 +41,6 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 
 
 	function renderThisPage(json) {
-		json['order']='Id';
 		if (getCount) json['count'] = true;
 		//var load = layer.load(2, { time: 10 * 1000 });
 		$.ajax({
@@ -88,7 +87,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 					lim = obj.limit;
 					//do something
 					condition.page = (obj.curr - 1) * obj.limit + ',' + obj.limit
-					var index=layer.load({ time: 10 * 1000 });
+					var index = layer.load({ time: 10 * 1000 });
 					renderThisPage(condition)
 					layer.close(index);
 
@@ -99,8 +98,8 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 		//col:存放数据表格的表头
 		colList = [];//存放所有元素名
 		for (var key in unit) {//unit：json，存放”元素-元素单位“键值对。该for循环将利用unit生成数据表格的表头
-			if (key == 'Id'||key=='TABLE_PRI') continue;
-			if(unit[key]=="") var item = { field: key, title: key , sort: true }
+			if (key == 'Id' || key == 'TABLE_PRI') continue;
+			if (unit[key] == "") var item = { field: key, title: key, sort: true }
 			else var item = { field: key, title: key + "(" + unit[key] + ")", sort: true }
 			colList.push(key);
 			col[0].push(item)
@@ -118,13 +117,9 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 			, defaultToolbar: ['filter', 'print']
 			, cols: col//数据表格表头
 			, limit: data1.length
-			, initSort: {
-				field: 'Id' //排序字段，对应 cols 设定的各字段名
-				, type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
-			}
 		});
-		$('#tableHead').html('表名:'+tableName);
-		$('#priHead').html('主键:'+pri);
+		$('#tableHead').html('表名:' + tableName);
+		$('#priHead').html('主键:' + pri);
 	}
 
 
@@ -178,7 +173,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 		delete tmp.xAxis;
 		for (var i in tmp)
 			yAxis.push(i);
-		console.log(yAxis.toString());
+		//console.log(yAxis.toString());
 		layer.open({
 			type: 2,
 			title: '折线图',
@@ -187,8 +182,14 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 			area: ['1000px', '600px'],
 			shadeClose: true,
 			shade: 0, //遮罩透明度
-			content: "./figure.html?tableName=" + tableName + "&axis=" + yAxis.toString(), //这里content是一个普通的String
+			content: "./figure.html?tableName=" + getQueryVariable("tableName") + "&axis=" + yAxis.toString(), //这里content是一个普通的String
 		});
+		return false;
+	});
+	form.on('submit(saveOrder)', function (data) {
+		condition.order=data.field.orderBy+"&&"+data.field.orderOption;
+		//console.log(condition)
+		renderThisPage(condition);
 		return false;
 	});
 
@@ -209,7 +210,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 				$.ajax({
 					url: hostName + '/test/select',
 					type: 'post',
-					data: JSON.stringify({"tableName":condition.tableName,"condition":condition.condition}),
+					data: JSON.stringify({ "tableName": condition.tableName, "condition": condition.condition }),
 					dataType: "json",
 					contentType: "application/json",
 					async: false,
@@ -219,16 +220,6 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 					//…
 				});
 
-				break;
-			case 'full':
-				$("body").attr('class', '');
-				$("#restore").attr('class', 'layui-inline');
-				$("#full").attr('class', 'layui-hide');
-				break;
-			case 'restore':
-				$("body").attr('class', 'layui-main');
-				$("#full").attr('class', 'layui-inline');
-				$("#restore").attr('class', 'layui-hide');
 				break;
 			case 'deleteTable':
 				layer.open({
@@ -246,7 +237,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 								data: { "tableName": tableName },
 								success: function (res) {
 									// console.log(res);
-									if (res == true) { window.location = './searchTable.html'; }
+									if (res == true) { window.top.location = '/'; }
 									else layer.msg("删除失败！", { icon: 5 });
 									layer.close(load);
 								}
@@ -328,7 +319,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 					formType: 0,
 					title: '查询'
 				}, function (value, index, elem) {
-					condition.page="0," + 20;
+					condition.page = "0," + lim;
 					condition.condition = value;
 					renderThisPage(condition);
 					layer.close(index);
@@ -339,6 +330,35 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 				break;
 			case 'reload':
 				window.location.reload();
+				break;
+			case 'order':
+				var html = document.getElementById("chooseOrder").innerHTML
+				// console.log(html);
+				// console.log(colList);
+				laytpl(html).render(['Id'].concat(colList), function (res) {
+					html = res;
+				});
+				var addLayer = layer.open({
+					type: 1,
+					title: '排序',
+					offset: 'auto',
+					area: ['500px', '600px'],
+					shadeClose: true,
+					shade: 0, //遮罩透明度
+					content: html, //这里content是一个普通的String
+					success: function () { 
+						form.render('select'); 
+						var tmp=condition.order.split("&&");
+						form.val("chooseOrder",{"orderBy":tmp[0],"orderOption":tmp[1]});
+					
+					},
+					cancel: function (index, layero) {
+						//window.location.reload();
+					}
+				});
+				layer.style(addLayer, {
+					opacity: 0.9,
+				});
 				break;
 		};
 	});
@@ -419,7 +439,7 @@ function getXlsxJson(data) {
 	}
 	layui.use(['jquery'], function () {
 		const $ = layui.jquery;
-		var load = layer.load(2, { time: 10 * 1000 });
+		var load = layer.load(2, { time: 100 * 1000 });
 		$.ajax({
 			url: hostName + '/test/insert',
 			type: 'post',

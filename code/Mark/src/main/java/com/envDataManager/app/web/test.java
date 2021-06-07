@@ -52,7 +52,11 @@ public class test {
 		}
 		if(jsonParam.containsKey("order"))//分页操作
 		{
-			order ="ORDER BY `"+jsonParam.getString("order")+"`";
+			String[] strArr = jsonParam.getString("order").split("&&");
+			if(strArr.length>1)
+				order ="ORDER BY `"+strArr[0]+"` "+strArr[1];
+			else
+				order ="ORDER BY `"+strArr[0]+"`";
 		}
 		if(jsonParam.containsKey("page"))//分页操作
 		{
@@ -70,6 +74,7 @@ public class test {
 		String sql="select * from `"+tableName+"` "+condition+" "+order+" "+page;
 		System.out.println(new Date()+" || userName:"+getUser().get("userName")+" || Function:select || Sql:"+sql);
 		res.addAll(db.getdb().executeQuery(sql));
+		//System.out.println(res);
 		return res;
 	}
 
@@ -150,7 +155,17 @@ public class test {
 		return res;
 		
 	}
-	
+
+	/////////////////////////////////////////////////获取参数单位
+	@CrossOrigin
+	@RequestMapping("test/getArea")
+	public List getArea(String area,String tableName)
+	{
+		String sql="SELECT DISTINCT(area) FROM "+tableName+" WHERE area LIKE '%"+area+"%'";
+		System.out.println(new Date()+" || userName:"+getUser().get("userName")+" || Function:getArea || Sql:"+sql);
+		return db.getdb().executeQuery(sql);
+	}
+
 ///////////////////////////////////获取该表的各列的统计信息，包括max、min、avg、std
 	@RequestMapping("test/getStatistics")
 	public List getStatistics(String tableName)
@@ -218,7 +233,6 @@ String tableComment=(String) jsonParam.get("tableComment");
 String siteId=(String) jsonParam.get("siteId");
 String tableName=(String) jsonParam.get("tableName");
 String sql="";
-String pri=(String) jsonParam.get("pri");
 List<HashMap> columnList=(List<HashMap>) jsonParam.get("param");  
 sql+="Create Table `"+tableName+"`(Id bigint NOT NULL UNIQUE AUTO_INCREMENT,";
 for(HashMap item:columnList)
@@ -226,8 +240,11 @@ for(HashMap item:columnList)
 sql+="`"+item.get("elementName")+"` "+item.get("dataType")+" COMMENT '"+item.get("Id")+"',";			
 }
 sql=sql.substring(0,sql.length()-1);
-sql+=",PRIMARY KEY ("+pri+"))";
-
+if(jsonParam.containsKey("pri")) {//是否有主键设置
+	String pri=(String) jsonParam.get("pri");
+	sql += ",PRIMARY KEY (" + pri + ")";
+}
+sql+=")";
 System.out.println(new Date()+" || userName:"+getUser().get("userName")+" || Function:CreatTable || Sql:"+sql);
 boolean res=db.getdb().executeUpdate(sql);
 if(res)

@@ -1,6 +1,7 @@
 var currentSize = 2, size = [2, 3, 4, 6, 12], now = [];
 var result = [];
-var curArea=[];
+var curArea = [];
+var lim = 10;
 var condition = { "tableName": "site", "condition": "" };
 layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 	var element = layui.element;
@@ -28,7 +29,10 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 				contentType: "application/json",
 				success: function (res) {
 
-					if (res == true) layer.msg("添加成功！")
+					if (res == true) {
+						layer.msg("添加成功！");
+						window.top.document.getElementById("changeToStation").click();
+					}
 					else layer.msg("添加失败！")
 					layer.close(load);
 				}
@@ -47,7 +51,8 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 				contentType: "application/json",
 				success: function (res) {
 
-					if (res == true) layer.msg("修改成功！")
+					if (res == true) 
+					{layer.msg("修改成功！");location.reload();}
 					else layer.msg("修改失败！")
 					layer.close(load);
 				}
@@ -59,22 +64,15 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 		delete result[0].md;
 		exportToExcel(result);
 	});
-	var index=layer.load({ time: 10 * 1000 });
-	$.ajax({
-		url: hostName + '/test/getUser',
-		type: 'get',
-		success: function (res) {
-			res.area;
-			var data = form.val('queryForm');
-			data.area = res.area;
-			curArea=res.area.split('-');
-			form.val('queryForm', data);
-			condition = { "tableName": "site", "condition": data.area + '&&' + data.condition };
-			updateCurrentPage(condition);
-		}
-		//…
-	});
 
+	////////////////////////预处理
+	var index = layer.load({ time: 10 * 1000 });
+	form.val("queryForm", { "area": getQueryVariable("area") });
+	curArea = getQueryVariable("area").split('-');
+	condition = { "tableName": "site", "condition": getQueryVariable("area"), "order": "Id&&ASC" };
+	updateCurrentPage(condition);
+
+	//////////////////////////
 	function updateCurrentPage(condition) {
 		$.ajax({
 			url: hostName + '/test/select',
@@ -90,14 +88,14 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 				laypage.render({
 					elem: 'test2' //注意，这里的 test1 是 ID，不用加 # 号
 					, count: result.length //数据总数，从服务端得到
-					, limit: 2
-					, limits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+					, limit: lim
+					, limits: [1, 2, 5, 10, 15, 25, 50]
 					, first: '首页'
 					, last: '尾页'
 					, prev: '上一页'
 					, next: '下一页'
 					, theme: 'mark'
-					, layout: ['count', 'page', 'prev', 'next', 'limit', 'limits']
+					, layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
 					, jump: function (obj, first) {
 						//obj包含了当前分页的所有参数，比如：
 						// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
@@ -111,7 +109,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 					}
 				});
 				//$('p').text(JSON.stringify(res))
-				changePage(1, 6, res);
+				changePage(1, lim, res);
 
 			}
 		});
@@ -124,6 +122,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 		laytpl(getTpl).render(item, function (html) {
 			$("#card").html(html);
 		});
+		element.render('collapse');
 	}
 
 });
@@ -140,12 +139,8 @@ function addTable(item) {
 			offset: 'auto',
 			area: '500px',
 			content: html, //这里content是一个普通的String
-			cancel: function (index, layero) {
-				location.reload();
-				return false;
-			}
 		});
-		form.val("stationInfo", now[item]);
+		if (item != -1) form.val("stationInfo", now[item]);
 		layer.style(addLayer, {
 			opacity: 0.9,
 		});
@@ -176,7 +171,7 @@ function deleteTable(Id) {
 							success: function (res) {
 								console.log(res);
 
-								if (res == true) { layer.msg("删除成功！", { icon: 1 }); location.reload(); }
+								if (res == true) { layer.msg("删除成功！", { icon: 1 }); window.top.document.getElementById("changeToStation").click(); }
 								else layer.msg("删除失败！", { icon: 5 });
 
 							}
@@ -219,10 +214,12 @@ function getXlsxJson(data) {
 }
 
 function chooseAdress(tableName) {
+
 	layui.use(['form', 'jquery', 'layer'], function () {
 		var form = layui.form;
 		var layer = layui.layer;
 		const $ = layui.jquery;
+		var adress = adressAll;
 		function getFirstAttr(obj) {
 			for (var k in obj) return k;
 		}
@@ -272,7 +269,7 @@ function chooseAdress(tableName) {
 					if (tmp[i] != "全部")
 						tmp2.push(tmp[i]);
 				}
-				curArea=tmp2;
+				curArea = tmp2;
 				data.area = tmp2.join("-");
 				console.log(data);
 				form.val(tableName, data);
@@ -284,26 +281,28 @@ function chooseAdress(tableName) {
 			},
 			success: function (layero, index) {
 				form.render('select');
-				switch(curArea.length)
-				{
-					case 0:
-						selectOption('全部', '全部');
-						break;
-					case 1:
-						selectOption(curArea[0],'全部');
-						break;
-					case 2:
-						selectOption(curArea[0],curArea[1]);
-						var data=form.val('chooseAddr');
-						data['area']='全部'
-						form.val('chooseAddr',data);
-						break;
-					case 3:
-						selectOption(curArea[0], curArea[1]);
-						var data=form.val('chooseAddr');
-						data['area']=curArea[2];
-						form.val('chooseAddr',data);
-						break;
+				if (curArea == "") selectOption('湖北省', '武汉市');
+				else {
+					switch (curArea.length) {
+						case 0:
+							selectOption('湖北省', '武汉市');
+							break;
+						case 1:
+							selectOption(curArea[0], getFirstAttr(adress[curArea[0]]));
+							break;
+						case 2:
+							selectOption(curArea[0], curArea[1]);
+							var data = form.val('chooseAddr');
+							data['area'] = getFirstAttr(adress[curArea[0]][curArea[1]])
+							form.val('chooseAddr', data);
+							break;
+						case 3:
+							selectOption(curArea[0], curArea[1]);
+							var data = form.val('chooseAddr');
+							data['area'] = curArea[2];
+							form.val('chooseAddr', data);
+							break;
+					}
 				}
 			}
 		});
