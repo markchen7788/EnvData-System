@@ -1,0 +1,5 @@
+com\envDataManager\app\utils\MyRealm.class
+com\envDataManager\app\utils\ShiroConfiguration.class
+com\envDataManager\app\db\db.class
+com\envDataManager\app\web\test.class
+com\envDataManager\app\envDataManagerApp.class

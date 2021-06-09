@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+        <title>EnvData System产品说明</title>
+        <meta charset="utf-8" />
+        <style type="text/css">
+                body {
+                        margin: 0 auto;
+                        font-family: Georgia, Palatino, serif;
+                        color: #444;
+                        line-height: 1;
+                        max-width: 960px;
+                        padding: 5px
+                }
+
+                h1,
+                h2,
+                h3,
+                h4 {
+                        color: #111;
+                        font-weight: 400
+                }
+
+                h1,
+                h2,
+                h3,
+                h4,
+                h5,
+                p {
+                        margin-bottom: 16px;
+                        padding: 0
+                }
+
+                h1 {
+                        font-size: 28px
+                }
+
+                h2 {
+                        font-size: 22px;
+                        margin: 20px 0 6px
+                }
+
+                h3 {
+                        font-size: 21px
+                }
+
+                h4 {
+                        font-size: 18px
+                }
+
+                h5 {
+                        font-size: 16px
+                }
+
+                a {
+                        color: #09f;
+                        margin: 0;
+                        padding: 0;
+                        vertical-align: baseline
+                }
+
+                a:hover {
+                        text-decoration: none;
+                        color: #f60
+                }
+
+                a:visited {
+                        color: purple
+                }
+
+                ul,
+                ol {
+                        padding: 0;
+                        margin: 0
+                }
+
+                li {
+                        line-height: 24px;
+                        margin-left: 44px
+                }
+
+                li ul,
+                li ul {
+                        margin-left: 24px
+                }
+
+                p,
+                ul,
+                ol {
+                        font-size: 14px;
+                        line-height: 20px;
+                        max-width: 540px
+                }
+
+                pre {
+                        padding: 0 24px;
+                        max-width: 800px;
+                        white-space: pre-wrap
+                }
+
+                code {
+                        font-family: Consolas, Monaco, Andale Mono, monospace;
+                        line-height: 1.5;
+                        font-size: 13px
+                }
+
+                aside {
+                        display: block;
+                        float: right;
+                        width: 390px
+                }
+
+                blockquote {
+                        border-left: .5em solid #eee;
+                        padding: 0 2em;
+                        margin-left: 0;
+                        max-width: 476px
+                }
+
+                blockquote cite {
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #bfbfbf
+                }
+
+
+                blockquote p {
+                        color: #666;
+                        max-width: 460px
+                }
+
+                hr {
+                        width: 540px;
+                        text-align: left;
+                        margin: 0 auto 0 0;
+                        color: #999
+                }
+
+                button,
+                input,
+                select,
+                textarea {
+                        font-size: 100%;
+                        margin: 0;
+                        vertical-align: baseline;
+                        *vertical-align: middle
+                }
+
+                button,
+                input {
+                        line-height: normal;
+                        *overflow: visible
+                }
+
+                button::-moz-focus-inner,
+                input::-moz-focus-inner {
+                        border: 0;
+                        padding: 0
+                }
+
+                button,
+                input[type="button"],
+                input[type="reset"],
+                input[type="submit"] {
+                        cursor: pointer;
+                        -webkit-appearance: button
+                }
+
+                input[type=checkbox],
+                input[type=radio] {
+                        cursor: pointer
+                }
+
+                input:not([type="image"]),
+                textarea {
+                        -webkit-box-sizing: content-box;
+                        -moz-box-sizing: content-box;
+                        box-sizing: content-box
+                }
+
+                input[type="search"] {
+                        -webkit-appearance: textfield;
+                        -webkit-box-sizing: content-box;
+                        -moz-box-sizing: content-box;
+                        box-sizing: content-box
+                }
+
+                input[type="search"]::-webkit-search-decoration {
+                        -webkit-appearance: none
+                }
+
+                label,
+                input,
+                select,
+                textarea {
+                        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                        font-size: 13px;
+                        font-weight: normal;
+                        line-height: normal;
+                        margin-bottom: 18px
+                }
+
+                input[type=checkbox],
+                input[type=radio] {
+                        cursor: pointer;
+                        margin-bottom: 0
+                }
+
+                input[type=text],
+                input[type=password],
+                textarea,
+                select {
+                        display: inline-block;
+                        width: 210px;
+                        padding: 4px;
+                        font-size: 13px;
+                        font-weight: normal;
+                        line-height: 18px;
+                        height: 18px;
+                        color: gray;
+                        border: 1px solid #ccc;
+                        -webkit-border-radius: 3px;
+                        -moz-border-radius: 3px;
+                        border-radius: 3px
+                }
+
+                select,
+                input[type=file] {
+                        height: 27px;
+                        line-height: 27px
+                }
+
+                textarea {
+                        height: auto
+                }
+
+                :-moz-placeholder {
+                        color: #bfbfbf
+                }
+
+                ::-webkit-input-placeholder {
+                        color: #bfbfbf
+                }
+
+                input[type=text],
+                input[type=password],
+                select,
+                textarea {
+                        -webkit-transition: border linear .2s, box-shadow linear .2s;
+                        -moz-transition: border linear .2s, box-shadow linear .2s;
+                        transition: border linear .2s, box-shadow linear .2s;
+                        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+                        -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+                        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1)
+                }
+
+                input[type=text]:focus,
+                input[type=password]:focus,
+                textarea:focus {
+                        outline: 0;
+                        border-color: rgba(82, 168, 236, 0.8);
+                        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+                        -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+                        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6)
+                }
+
+                button {
+                        display: inline-block;
+                        padding: 4px 14px;
+                        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                        font-size: 13px;
+                        line-height: 18px;
+                        -webkit-border-radius: 4px;
+                        -moz-border-radius: 4px;
+                        border-radius: 4px;
+                        -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+                        -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+                        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+                        background-color: #0064cd;
+                        background-repeat: repeat-x;
+                        background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));
+                        background-image: -moz-linear-gradient(top, #049cdb, #0064cd);
+                        background-image: -ms-linear-gradient(top, #049cdb, #0064cd);
+                        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049cdb), color-stop(100%, #0064cd));
+                        background-image: -webkit-linear-gradient(top, #049cdb, #0064cd);
+                        background-image: -o-linear-gradient(top, #049cdb, #0064cd);
+                        background-image: linear-gradient(top, #049cdb, #0064cd);
+                        color: #fff;
+                        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+                        border: 1px solid #004b9a;
+                        border-bottom-color: #003f81;
+                        -webkit-transition: .1s linear all;
+                        -moz-transition: .1s linear all;
+                        transition: .1s linear all;
+                        border-color: #0064cd #0064cd #003f81;
+                        border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)
+                }
+
+                button:hover {
+                        color: #fff;
+                        background-position: 0 -15px;
+                        text-decoration: none
+                }
+
+                button:active {
+                        -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+                        -moz-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+                        box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05)
+                }
+
+                button::-moz-focus-inner {
+                        padding: 0;
+                        border: 0
+                }
+        </style>
+</head>
+
+<body>
+
+        <h1><b>操作说明</b></h1>
+        <h3>一、登陆与用户信息管理</h3>
+        <ol>
+                <li>管理员用户名"admin",默认密码"admin",建议修改；</li>
+                <li>管理员可以在登陆后"点击头像"来配置系统数据库连接和文件管理系统地址；</li>
+                <li>用户所在地区可以精确到任意级别(国、省、市、区),字段为空即默认为全国。用户可在登陆后修改个人信息。</li>
+        </ol>
+        <h3>二、基本信息配置</h3>
+        <ol>
+                <li>
+                        <p>监测站点信息配置</p>
+                        <ul>
+                                <li>用户只能够看到所在地区下的站点,非管辖区域的站点不可以查看到。</li>
+                                <li>站点信息管理首页显示的是所有可以管理的站点信息。</li>
+                                <li>左边的导航栏是随着管辖区域站点信息的变化而变化,即导航栏只能索引到存在站点的区域，没有站点的区域不会出现在导航栏上。（这里所说的“存在的站点”是指用户可查看到站点，并不是数据库中所有的站点）
+                                </li>
+                                <li>系统支持对站点信息进行增加、删除、修改、查询(支持搜索)、导入、导出等操作。导入文件的格式为xlsx,文件内容的格式与导出文件的格式基本一致。导入的内容无需包含站点Id这一字段,数据库会自动生成。
+                                </li>
+                                <li>站点信息的删除功能具有保护措施，如若站点下存在数据表格，系统会拒绝对其进行删除操作。</li>
+                                <li>站点地区必须精确到区县一级。</li>
+                        </ul>
+                </li>
+                <li>
+                        <p>监测元素信息配置</p>
+                        <ul>
+                                <li>系统支持对站点信息进行增加、删除、多删、修改、查询(支持搜索)、导入、导出等操作。导入文件的格式为xlsx,文件内容的格式与导出文件的格式基本一致。导入的内容无需包含元素Id这一字段,数据库会自动生成。
+                                </li>
+                                <li>元素的数据类型与MySQL数据库字段数据类型要保持一致，否则建表时会产生异常。如若某元素被表格使用，该元素信息不可删除。</li>
+                        </ul>
+                </li>
+        </ol>
+        <h3>三、监测数据表格管理</h3>
+        <ol>
+                <li>基本功能：查看表格信息(支持搜索)、删除表格信息、新建表格</li>
+                <li>查看表格：首页显示的是所有可以管理的表格的信息。左边的导航栏是随着管辖区域表格信息的变化而变化,即导航栏只能索引到存在表格的区域，没有表格的区域不会出现在导航栏上。（这里所说的“存在的表格”是指用户可查看到表格，并不是数据库中所有的监测表格）
+                </li>
+                <li>创建表格：表名、备注必须填写，站点信息、元素必须选择，主键可选可不选。站点信息只能选择当前用户能够查看到的，非授权的站点信息无法选择。</li>
+        </ol>
+        <h3>四、监测表格数据管理</h3>
+        <ol>
+                <li>基本功能：增加、删除、多删、修改、查询(支持搜索)、排序、导入、导出；</li>
+                <li>排序可以参照任意字段进行升序、降序排列；导入数据字段需要与表格字段一致，无需添加Id,系统会自动生成。</li>
+                <li>数据统计分析：生成各字段的最大值、最小值、平均值、标准差</li>
+                <li>数据可视化显示：选择横纵坐标，生成折线图。横坐标为一项元素，纵坐标可为多项元素。</li>
+                <li>导入模式有两种：忽略主键重复数据模式、更新主键重复数据模式。导入时数据如果存在主键重复，前者会忽略此次插入操作，后者会用新数据来覆盖旧数据。</li>
+        </ol>
+        <h3>五、文件管理</h3>
+        <ol>
+                <li>利用php做的网盘子系统，作为系统的辅助功能，如若想使用其它网盘来取代该子系统，可以用管理员用户登陆并在系统配置中修改网盘地址。</li>
+                <li>管理员用户：admin 密码：admin 登陆后可查看所有用户文件，并可管理用户信息(接入了phpLiteAdmin来管理sqlite数据库,登陆默认密码：admin)。</li>
+                <li>基本功能：查看所有文件、新建文件夹、删除文件、删除文件夹、上传文件、下载文件。</li>
+        </ol>
+
+        <h1><b>数据库配置说明</b></h1>
+        <ol>
+                <li>
+                        <p>主系统(Springboot)数据库配置：</p>
+                        <ul>
+                                <li>在MySQL数据库管理系统(本人所用版本5.6）中建立名为envdata的数据库，字符utf-8mb4;</li>
+                                <li>利用数据库可视化工具导入envdata.sql(检查一下col视图是否可以读出数据）</li>
+                                <li>数据库名可以不同，但是可能会造成视图col无法读取数据，这个时候需要修改col视图的源sql代码，把数据库名修该成当前数据库名；（建议就用envdata作为数据库名，col视图源码见col.sql文件）
+                                </li>
+                                <li>初次进入系统登陆界面，会弹出数据库配置窗口，配置一下数据库参数和网盘子系统地址即可正常使用系统。</li>
+                                <li>如果想切换数据库或者网盘子系统地址，可以直接删除config.json文件，然后重新在登陆界面配置。（config.json文件存放位置：源码运行时存储在根目录，jar包运行时与jar包同目录）
+                                </li>
+                                <li>系统管理员用户名：admin 系统管理员密码：admin 利用admin账号登陆时可以在主界面的用户头像处查看到系统配置按钮，点击它同样可以配置数据库和网盘地址。
+                                </li>
+                        </ul>
+                </li>
+                <li>
+                        <p>php网盘数据库</p>
+                        <ul>
+                                <li>该子系统数据库是sqlite数据库，数据库文件test.db在网盘源码根目录的DB文件夹中,可以用数据库可视化工具来读取它。</li>
+                                <li>系统管理员用户名：admin 系统管理员密码：admin 该用户可以查看网盘存储系统中的的所有文件。</li>
+                                <li>如果不想使用本网盘系统，也可修改主系统配置外接其它网盘系统（百度网盘、可道云、cloudreve）。</li>
+                        </ul>
+                </li>
+        </ol>
+
+        <!-- Use style in style2-->
+</body>
+
+</html>

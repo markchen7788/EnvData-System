@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <title>EnvData System</title>
+  <link rel="stylesheet" href="./res/layui/css/layui.css">
+  <style id="bg">
+    html {
+      margin: 0px;
+      padding: 0px;
+      height: 100%;
+    }
+
+    /* body {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            background: url("./res/index_bg4.jpg") no-repeat 0px 0px;
+            background-size: cover;
+            background-attachment: fixed;
+            opacity: 0.9;
+        } */
+    /* body {
+    background:url(./res/index_bg7.jpg) top left;background-size:100%;
+  } */
+  </style>
+</head>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<script src="./js/func.js"></script>
+
+<body style="background:url(./res/index_bg7.jpg) top left;background-size:100%;overflow-y: hidden;">
+  <b>
+    <div class="layui-layout layui-layout-admin">
+      <div class="layui-header">
+        <div class="layui-logo layui-hide-xs layui-bg-black">
+          <a href="javascript:changeBg()">
+            <img src="./res/app.jpg" class="layui-nav-img">
+            <font face="verdana" size="2" color="#009688">EnvData System</font>
+          </a>
+        </div>
+        <!-- 头部区域（可配合layui 已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+          <li class="layui-nav-item">
+            <a href="javascript:;">
+              <img src="./res/basicInfoSettings.jpeg" class="layui-nav-img">
+              基础信息配置
+            </a>
+            <dl class="layui-nav-child">
+              <dd><a id="changeToStation" ; href="javascript:changeToStation();">
+                  <i class="layui-icon layui-icon-home"></i>
+                  站点信息配置</a></dd>
+              <dd><a href="javascript:changeWindow('./element.html',1);">
+                  <i class="layui-icon layui-icon-snowflake"></i>
+                  元素信息配置</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">
+              <img src="./res/table.jpeg" class="layui-nav-img">
+              报表管理
+            </a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:location.reload();">
+                  <i class="layui-icon layui-icon-table"></i>
+                  查看报表</a></dd>
+              <dd><a href="javascript:changeWindow('./createTable.html',2);">
+                  <i class="layui-icon layui-icon-form"></i>
+                  新建报表</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a id="netDisk" href="https://pan.baidu.com/" target="_blank">
+              <img src="./res/dir.jpeg" class="layui-nav-img">
+              文件管理
+            </a>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:Introduction();">
+              <img src="./res/about.jpg" class="layui-nav-img">
+              使用说明
+            </a>
+          </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+
+          <li class="layui-nav-item">
+            <a href="javascript:;" id="userName">
+              <img src="./res/profile.jpeg" class="layui-nav-img">
+              未登录
+            </a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:addLay()">
+                  <i class="layui-icon layui-icon-username"></i>
+                  基本资料</a></dd>
+              <div id="settings"></div>
+              <dd><a href="javascript:logout()">
+                  <i class="layui-icon layui-icon-logout"></i>
+                  退出系统</a></dd>
+            </dl>
+          </li>
+        </ul>
+      </div>
+
+      <div class="layui-side layui-bg-black">
+        <div id="myNav" class="layui-side-scroll">
+
+        </div>
+      </div>
+
+      <div class="layui-body" id="layuiBody"
+        style="position:absolute;top:60px;height: calc(100% - 60px);overflow-y: hidden;">
+        <!-- 内容主体区域 -->
+        <iframe id="frame" style="background-color: rgba(255,255,255,0.6);" src="./searchTable.html?area=" width="100%"
+          height="100%" frameborder=0 scrolling="auto"></iframe>
+      </div>
+
+      <div class="layui-footer layui-bg-black">
+        <!-- 底部固定区域 -->
+        <div class="layui-layout">
+          <i class="layui-icon layui-icon-auz" style="font-size: 13px;">
+            可动态扩展的环境监测数据管理系统</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <i class="layui-icon layui-icon-about" style="font-size: 13px;">
+            Made By MarkChen @ June 2021</i>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <i class="layui-icon layui-icon-link" style="font-size: 13px;">
+            <a style="color:#FFF;" href="https://gitee.com/markchen7788/GradualtionDesign" target="_blank">Cick Here To Get More
+              Info In My Gitee Repository</a></i>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <i class="layui-icon layui-icon-log" style="font-size: 13px;">
+            <a style="color:#FFF;" id="timeNow" href="javascript:location.reload();">Cick Here To Get More
+              Info In My Gitee Repository</a></i>
+
+        </div>
+      </div>
+    </div>
+  </b>
+
+
+
+
+
+
+  <script type="text/html" id="demo">
+    <div style="padding:10px;">
+      <form lay-filter='addInfo' class="layui-form" action="">
+        <input type="text" name="Id" class="layui-hide" placeholder="Id" autocomplete="off" value="{{d.Id}}">
+        <table class="layui-table" style="text-align: center;" lay-size="sm">
+          <colgroup>
+            <col width="20%">
+            <col width="80%">
+          </colgroup>
+          <tbody>
+       
+            <tr>
+              <td>用户名</td>
+              <td><input type="text"  value="{{d['userName']}}"  name="{{'userName'}}" placeholder="{{'userName'}}" autocomplete="off" class="layui-input"></td>
+            </tr>
+            <tr>
+              <td>密码</td>
+              <td><input type="password"  value="{{d['pwd']}}"  name="{{'pwd'}}" placeholder="{{'pwd'}}" autocomplete="off" class="layui-input"></td>
+            </tr>
+            <tr>
+              <td>地区</td>
+              <td onclick="chooseAdress('addInfo')"><input type="text"  value="{{d['area']}}" name="area" placeholder="{{'area'}}" autocomplete="off" class="layui-input" disabled></td>
+            </tr>
+
+          </tbody>
+        </table>
+        <button type="button" lay-submit lay-filter="saveElementInfo" class="layui-btn layui-btn-fluid">保存</button>
+      </form>
+    </div>
+</script>
+  <script id="adress" type="text/html">
+  <form class="layui-form" name="chooseAddr" style="padding: 20px;">
+    <div class="layui-form-item">
+    <div class="layui-input-inline">
+      <select id="province" lay-filter="province" name="province" lay-search>
+      </select>
+    </div>
+    </div>
+    <div class="layui-form-item">
+    <div class="layui-input-inline">
+      <select id="city" lay-filter="city" name="city" lay-search>
+      </select>
+    </div>
+    </div>
+    <div class="layui-form-item">
+    <div class="layui-input-inline">
+      <select id="area" lay-filter="area" name="area" lay-search>
+      </select>
+    </div>
+    </div>
+  </form>
+  </script>
+  <script id="configForm" type="text/html">
+    <form class="layui-form layui-form-pane" style="padding: 20px;" lay-filter="configForm" name="configForm">
+      <div class="layui-form-item">
+        <label class="layui-form-label">主机名</label>
+        <div class="layui-input-block">
+          <input type="text" name="hostName" required lay-verify="required" placeholder="请输入主机名" autocomplete="off"
+            class="layui-input">
+        </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">用户名</label>
+          <div class="layui-input-block">
+            <input type="text" name="userName" required lay-verify="required" placeholder="请输入用户名" autocomplete="off"
+              class="layui-input">
+        </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+              <input name="pwd" type="password" required lay-verify="required" placeholder="请输入数据库密码" autocomplete="off"
+                class="layui-input">
+        </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">数据库名</label>
+              <div class="layui-input-block">
+                <input type="text" name="dbName" required lay-verify="required" placeholder="请输入数据库名" autocomplete="off"
+                  class="layui-input">
+        </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">网盘地址</label>
+                <div class="layui-input-block">
+                  <input type="text" name="netDisk" required lay-verify="required" placeholder="请输入网盘地址" autocomplete="off"
+                    class="layui-input">
+        </div>
+                </div>
+
+                <div class="layui-form-item">
+                  <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                  </div>
+                </div>
+    </form>
+  </script>
+  <script id="navDemo" type="text/html">
+        <ul class="layui-nav layui-nav-tree" lay-shrink="all" lay-filter="">
+            {{# for(var province in d){}}
+        <li class="layui-nav-item">
+                <a href="javascript:;"><i class="layui-icon layui-icon-location layui-inline"
+                    style="font-size: 15px;"></i>&nbsp;{{province}}</a>
+                    {{# for(var city in d[province]){}}
+            <dl class="layui-nav-child">
+                    <dd>
+                        <a href="javascript:;">&nbsp;<i class="layui-icon layui-icon-location layui-inline"
+                            style="font-size: 15px;"></i>&nbsp;{{city}}</a>
+                        {{# for(var county in d[province][city]){}}
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:changeWindow('{{province+'-'+city+'-'+county}}',0);">&nbsp;&nbsp;&nbsp;<i
+                                class="layui-icon layui-icon-location layui-inline"
+                                style="font-size: 15px;"></i>&nbsp;{{county}}</a></dd>
+                        </dl>
+                        {{# }}}
+                    </dd>
+                </dl>
+                {{# }}}
+        </li>
+            {{# }}}
+    </ul>
+    </script>
+  <script id="navDemo2" type="text/html">
+    <ul class="layui-nav layui-nav-tree" lay-shrink="all" lay-filter="">
+        <li class="layui-nav-item">
+                <a href="javascript:location.reload();"><i class="layui-icon layui-icon-home layui-inline"
+                    style="font-size: 15px;"></i>&nbsp;返回主页</a>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:logout()">
+                <i class="layui-icon layui-icon-logout"></i>
+                退出系统</a>
+        </li>
+    </ul>
+</script>
+
+  <script src="./js/adress.js"></script>
+  <script src="./res/layui/layui.js"></script>
+  <script src="./js/index.js"></script>
+  <br><br><br><br>
+</body>
+
+</html>
