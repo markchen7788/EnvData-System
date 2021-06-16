@@ -1,0 +1,162 @@
+var colNameJson = { "Id": "Id", "elementName": "元素名", "elementUnit": "元素单位", "dataType": "元素类型", "elementMemo": "备注" }
+layui.use(['element', 'table', 'jquery', 'laytpl'], function () {
+	var element = layui.element;
+	var table = layui.table;
+	const $ = layui.jquery;
+	var form = layui.form;
+	var laytpl = layui.laytpl;
+	var tableCols = {};
+	var data1;
+	function renderThisPage(json) {
+		var load = layer.load({ time: 10 * 1000 });
+		$.ajax({
+			url: 'testJsonData/element.json',
+			type: 'post',
+			data: JSON.stringify(json),
+			dataType: "json",
+			contentType: "application/json",
+			async: false,
+			success: function (res) {
+
+				data1 = res;
+				//console.log(JSON.stringify(data1));
+				layer.close(load);
+			}
+			//…
+		});
+		var col = [[{ type: 'checkbox', fixed: 'left' }]], edi = { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 };
+		for (var key in colNameJson) {
+			var item = { field: key, title: key, sort: true }
+			col[0].push(item)
+			tableCols[key] = "";
+		}
+		col[0].push(edi)
+		//console.log(col);
+
+		table.render({
+			elem: '#test'
+			, data: data1
+			, height: 'full'
+			, even: 'true'
+			, size: 'sm'
+			, cellMinWidth: 100 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+			, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+			, defaultToolbar: ['filter', 'print']
+			, cols: col
+			, page: { limit: 15, limits: [15, 30, 50, 100, 200, 300] }
+		});
+
+	}
+
+	renderThisPage({ "tableName": "element", "condition": "", "order": "Id" });
+
+	form.on('submit(saveElementInfo)', function (data) {
+		layer.msg(JSON.stringify(data.field));
+		return false;
+	});
+
+
+
+
+	table.on('toolbar(test)', function (obj) {
+		var checkStatus = table.checkStatus(obj.config.id);
+		switch (obj.event) {
+			case 'add':
+				tableCols.Id = -1;
+				addLay(tableCols);
+				break;
+			case 'import':
+				document.getElementById('upload').click();
+				break;
+			case 'export':
+				exportToExcel(data1);
+				break;
+			case 'multiDelete':
+				var data = checkStatus.data;
+				var addLayer = layer.open({
+					type: 1,
+					offset: 'auto',
+					area: '500px',
+					btn: ['确认'],
+					yes: function (index, layero) {
+						deleteElement(data);
+					},
+					content: '  亲亲，真的删除这些行么？', //这里content是一个普通的String
+					cancel: function (index, layero) {
+						window.location.reload();
+					}
+				});
+				layer.style(addLayer, {
+					opacity: 0.9,
+				});
+				break;
+			case 'query':
+				var L = layer.prompt({
+					formType: 0,
+					title: '查询'
+				}, function (value, index, elem) {
+					var tmp={ "tableName": "element", "condition": value };
+					layer.msg("全字段查询，条件："+JSON.stringify(tmp))
+					layer.close(index);
+				});
+				layer.style(L, {
+					opacity: 0.9,
+				});
+				break;
+			case 'reload':
+				window.location.reload();
+				break;
+		};
+	});
+	table.on('tool(test)', function (obj) {
+		var data = obj.data;
+		//console.log(obj)
+		if (obj.event === 'del') {
+			var L = layer.confirm('亲亲，真的删除行么？', function (index) {
+				obj.del();
+				var tmp = [];
+				tmp.push(data);
+				deleteElement(tmp);
+				layer.close(index);
+			});
+			layer.style(L, {
+				opacity: 0.9,
+			});
+		} else if (obj.event === 'edit') {
+			addLay(data);
+		}
+	});
+
+	function deleteElement(tmp) {
+		layer.msg(JSON.stringify(tmp));
+	}
+	function addLay(data) {
+		var html = demo.innerHTML;
+		laytpl(html).render(data, function (res) {
+			html = res;
+		});
+		var addLayer = layer.open({
+			type: 1,
+			title: '站点信息',
+			offset: 'auto',
+			area: '500px',
+			content: html, //这里content是一个普通的String
+			cancel: function (index, layero) {
+				window.location.reload();
+			}
+		});
+		layer.style(addLayer, {
+			opacity: 0.9,
+		});
+	}
+	//…
+});
+
+function getXlsxJson(data) {
+	for (var item in data) {
+		data[item]['tableName'] = 'element';
+	}
+	layui.use(['jquery'], function () {
+		layer.msg(JSON.stringify(data));
+	});
+}

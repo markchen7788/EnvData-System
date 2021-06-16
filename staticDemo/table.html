@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>可动态扩展的环境监测数据管理系统</title>
+	<link rel="stylesheet" href="../code/Mark/src/main/resources/static/res/layui/css/layui.css">
+	<style>
+		.layui-table-page {
+			z-index: 99999;
+			position: fixed;
+			bottom: 0;
+		}
+	</style>
+</head>
+<script src="../code/Mark/src/main/resources/static/res/layui/layui.js"></script>
+<script src="./js/data.js"></script>
+<script src="./js/func.js"></script>
+<script src="./js/xlsxToJson.js"></script>
+<style>
+	.page {
+		background-color: rgba(255, 255, 255);
+		width: 100%;
+		position: fixed;
+		bottom: 0;
+	}
+
+	.layui-laypage-mark {
+		margin-bottom: 0px;
+		margin-left: 10px;
+		padding: 0px;
+		background-color: rgba(255, 255, 255);
+	}
+
+	.layui-form-select dl {
+		max-height: 500px;
+	}
+</style>
+
+<body class="layui-bg-gray">
+
+	<b>
+		<table class="layui-hide" lay-skin="row" lay-filter="test" id="test"></table>
+		<div class="page">
+			<div id="test1"></div>
+		</div>
+		<input type="file" class="layui-hide" id="upload" onchange="change(this,getXlsxJson)" style="width: 320px;"
+			accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-btn-container layui-table-tool-temp">
+				<div class="layui-inline" lay-event="return" title="返回上一页">
+					<i class="layui-icon layui-icon-return"></i>
+				</div>
+				<div class="layui-inline" lay-event="reload" title="刷新">
+					<i class="layui-icon layui-icon-refresh-3"></i>
+				</div>
+				<div class="layui-inline" lay-event="deleteTable" title="删除表格">
+					<i class="layui-icon layui-icon-set"></i>
+				</div>
+				<div class="layui-inline" lay-event="add" title="手动添加数据">
+					<i class="layui-icon layui-icon-add-1"></i>
+				</div>
+				<div class="layui-inline" lay-event="multiDelete" title="批量删除" >
+					<i class="layui-icon layui-icon-delete"></i>
+				</div>
+				<div class="layui-inline" lay-event="import" title="文件导入数据">
+					<i class="layui-icon layui-icon-file-b"></i>
+				</div>
+				<div class="layui-inline" lay-event="export" title="导出数据至Excel文件">
+					<i class="layui-icon layui-icon-export"></i>
+				</div>
+				<div class="layui-inline" lay-event="query" title="查询">
+					<i class="layui-icon layui-icon-search"></i>
+				</div>
+				<div class="layui-inline" lay-event="chart" title="生成图表">
+					<i class="layui-icon layui-icon-chart"></i>
+				</div>
+				<div class="layui-inline" lay-event="statistic" title="统计分析">
+					<i class="layui-icon layui-icon-chart-screen"></i>
+				</div>
+				<div class="layui-inline" lay-event="order" title="排序">
+					<i class="layui-icon layui-icon-triangle-d"></i>
+				</div>
+				<span id="tableHead" class="layui-badge layui-bg-blue layui-inline">监测元素基本信息表</span>
+				<span id="priHead" class="layui-badge layui-bg-orange layui-inline">监测元素基本信息表</span>
+			</div>
+		  </script>
+		<script type="text/html" id="demo">
+			<div style="padding:10px;">
+				<form lay-filter='addInfo' class="layui-form" action="">
+					<input type="text" name="Id" class="layui-hide" placeholder="Id" autocomplete="off" value="{{d.Id}}">
+					<table class="layui-table" style="text-align: center;" lay-size="sm">
+						<colgroup>
+							<col width="20%">
+							<col width="80%">
+						</colgroup>
+						<tbody>
+					{{# 
+						for(var i in d){ if(i=='Id') continue;
+					}}
+							<tr>
+								<td>{{i}}</td>
+								<td><input type="text"  value="{{d[i]}}"  name="{{i}}" placeholder="{{i}}" autocomplete="off" class="layui-input"></td>
+							</tr>
+					{{# } }}
+						</tbody>
+					</table>
+					<button type="button" lay-submit lay-filter="saveElementInfo" class="layui-btn layui-btn-fluid">保存</button>
+				</form>
+			</div>
+	</script>
+		<div id="Axis" class="layui-hide">
+			<form class="layui-form" style="padding: 50px;" action="">
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+					<legend>请选择横坐标</legend>
+				</fieldset>
+				<select name="xAxis" style="overflow: visible;" lay-filter="aihao">
+					{{# for(var i in d) { }}
+					<option value="{{d[i]}}">{{d[i]}}</option>
+					{{# } }}
+				</select>
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+					<legend>请选择纵坐标</legend>
+				</fieldset>
+				{{# for(var i in d) { }}
+				<div class="layui-col-md3">
+					<input type="checkbox" name="{{d[i]}}" title="{{d[i]}}" lay-skin="primary">
+				</div>
+				{{# } }}
+				<br><br><br><br><br><br><br><br><br>
+				<button type="button" lay-submit lay-filter="saveAixs" class="layui-btn layui-btn-fluid">确认</button>
+			</form>
+		</div>
+
+		<div id="chooseOrder" class="layui-hide">
+			<form class="layui-form" lay-filter="chooseOrder" style="padding: 50px;" action="">
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+					<legend>请选择排序参照字段</legend>
+				</fieldset>
+				<select name="orderBy" lay-search>
+					{{# for(var i in d) { }}
+					<option value="{{d[i]}}">{{d[i]}}</option>
+					{{# } }}
+				</select>
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+					<legend>请选择排序方式</legend>
+				</fieldset>
+				<select name="orderOption">
+					<option value="ASC">升序</option>
+					<option value="DESC">降序</option>
+				</select>
+				<br><br><br><br><br><br><br><br><br>
+				<button type="button" lay-submit lay-filter="saveOrder" class="layui-btn layui-btn-fluid">确认</button>
+			</form>
+		</div>
+		<script type="text/html" id="barDemo">
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		  </script>
+	</b>
+</body>
+
+
+<script src="./js/table.js"></script>
+
+</html>

@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EnvData System</title>
+  <!--图标库 可无视-->
+  <link rel='stylesheet' href='../code/Mark/src/main/resources/static/res/css/font-awesome.min.css'>
+  <link rel="stylesheet" type="text/css" href="../code/Mark/src/main/resources/static/res/layui/css/layui.css" />
+  <!--核心样式-->
+  <link rel="stylesheet" href="../code/Mark/src/main/resources/static/res/css/style.css">
+  <style>
+    .my-background {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      background-image: url("../code/Mark/src/main/resources/static/res/index_bg3.jpg");
+    }
+
+    .loginPanel {
+      margin: auto;
+      position: absolute;
+      top: calc(10%);
+    }
+  </style>
+</head>
+<script src="../code/Mark/src/main/resources/static/res/layui/layui.js"></script>
+<script src="./js/func.js"></script>
+
+<body class="my-background">
+  <script id="adress" type="text/html">
+    <form class="layui-form" name="chooseAddr" style="padding: 20px;">
+      <div class="layui-form-item">
+        <div class="layui-input-inline">
+          <select id="province" lay-filter="province" name="province" lay-search>
+          </select>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-inline">
+          <select id="city" lay-filter="city" name="city" lay-search>
+          </select>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-inline">
+          <select id="area" lay-filter="area" name="area" lay-search>
+          </select>
+        </div>
+      </div>
+    </form>
+  </script>
+  <b>
+    <div class="layui-row">
+      <ul class="layui-nav layui-col-md12" style="background-color: rgba(255,255,255,0);" lay-filter="">
+        <li class="layui-nav-item"> <a href="javascript:RandomBg()"><img src="../code/Mark/src/main/resources/static/res/app.jpg" class="layui-nav-img">
+            <font face="verdana" size="3" color="#009688">EnvData System</font>
+          </a></li>
+        <li class="layui-nav-item"><a href="javascript:Introduction()">产品说明</a></li>
+        <li class="layui-nav-item"><a href="https://gitee.com/markchen7788/GradualtionDesign" target="_blank">Gitee仓库</a></li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">关于开发者</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a href="javascript:personInfo()">开发者信息</a></dd>
+            <dd><a href="https://markchen7788.gitee.io/" target="_blank">开发者博客</a></dd>
+            <dd><a href="https://gitee.com/markchen7788" target="_blank">Gitee主页</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+  </b>
+  <div class="layui-row" style="height: 100%;">
+    <div class="layui-col-md6 layui-col-xs1 layui-col-md-offset1 "
+      style="height:488px; top: calc(7%);text-align: center;">
+      <b>
+        <p>
+          <font size="8" face="Verdana" color="#5FB878">EnvData System<i class="layui-icon layui-icon-tree" style="font-size: 43px;"></i></font><br><br><br><br>
+          <font size="7" face="Verdana" color="#FFF"> "可动态扩展的环境监测数据管理系统"</font> <br><br><br><br>
+          <font size="5" face="Verdana" color="#FFF"><i class="layui-icon layui-icon-star" style="font-size: 23px;"></i>"帮您高效管理环境监测数据"</font> <br><br><br>
+          <font size="5" face="Verdana" color="#FFF"><i class="layui-icon layui-icon-star" style="font-size: 23px;"></i>"支持数据库动态扩展"</font> <br><br><br>
+          <font size="5" face="Verdana" color="#FFF"><i class="layui-icon layui-icon-star" style="font-size: 23px;"></i>"支持Excel文件导入数据"</font> <br><br><br>
+          
+        </p>
+      </b>
+    </div>
+    <div class="layui-col-md4 layui-col-xs11" style="height:80%; top: calc(7%);">
+      <div class="container">
+        <div class="card"></div>
+        <div class="card">
+          <h1 class="title">Envdata system</h1>
+          <form name="loginForm">
+            <div class="input-container">
+              <input type="text" id="userName" required="required" />
+              <label>用户名</label>
+              <div class="bar"></div>
+            </div>
+            <div class="input-container">
+              <input type="password" id="pwd" required="required" />
+              <label>密码</label>
+              <div class="bar"></div>
+            </div>
+            <div class="button-container">
+              <button type="button" id="login"><span>登录</span></button>
+            </div>
+          </form>
+        </div>
+        <div class="card alt">
+          <div class="toggle"></div>
+          <h1 class="title">注册
+            <div class="close"></div>
+          </h1>
+          <form name='registry'>
+            <div class="input-container">
+              <input type="text" id="userName" required="required" />
+              <label>用户名</label>
+              <div class="bar"></div>
+            </div>
+            <div class="input-container">
+              <input type="password" id="pwd" required="required" />
+              <label>密码</label>
+              <div class="bar"></div>
+            </div>
+            <div class="input-container">
+              <input onclick="chooseAdress()" type="#{type}" id="district" required="required" />
+              <label for="#{label}">地区</label>
+              <div class="bar"></div>
+            </div>
+            <div class="button-container">
+              <button type="button" onclick="addUser()"><span>提交注册</span></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    style="position: fixed;bottom: 0;text-align:center;width: 100%;padding-bottom: 10px;color: #FFF;font-size: large;background-color: rgba(255,255,255,0.0);">
+    <!-- 底部固定区域 -->
+    <b>
+      <i class="layui-icon layui-icon-auz" style="font-size: 13px;">
+        可动态扩展的环境监测数据管理系统</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <i class="layui-icon layui-icon-about" style="font-size: 13px;">
+        Made By MarkChen @ June 2021</i>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <i class="layui-icon layui-icon-link" style="font-size: 13px;">
+        <a style="color:#FFF;" href="https://gitee.com/markchen7788/GradualtionDesign" target="_blank">Cick Here To Get More
+          Info In My Gitee Repository</a></i>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <i class="layui-icon layui-icon-log" style="font-size: 13px;">
+        <a style="color:#FFF;" id="timeNow" href="javascript:location.reload();">Cick Here To Get More
+          Info In My Gitee Repository</a></i></b>
+    <br>
+  </div>
+
+  <script id="form2" type="text/html">
+    <h1 class="title">数据库配置</h1>
+    <form name="configForm">
+      <div class="input-container">
+        <input type=text" id="hostName" required="required" />
+        <label>主机名</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type=text" id="userName" required="required" />
+        <label>用户名</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" id="pwd" required="required" />
+        <label for="#{label}">密码</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="text" id="dbName" required="required" />
+        <label>数据库名</label>
+        <div class="bar"></div>
+      </div>
+      <div class="button-container">
+        <button type="button" onclick="saveConfig()" ><span>提交修改</span></button>
+      </div>
+    </form>
+    </script>
+  <script type="text/html" id="configForm">
+    <form class="layui-form layui-form-pane" style="padding: 20px;" lay-filter="configForm" name="configForm">
+      <div class="layui-form-item">
+        <label class="layui-form-label">主机名</label>
+        <div class="layui-input-block">
+          <input type="text" name="hostName" required lay-verify="required" placeholder="请输入主机名" autocomplete="off"
+            class="layui-input">
+        </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">用户名</label>
+          <div class="layui-input-block">
+            <input type="text" name="userName" required lay-verify="required" placeholder="请输入用户名" autocomplete="off"
+              class="layui-input">
+        </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+              <input name="pwd" type="password" required lay-verify="required" placeholder="请输入数据库密码" autocomplete="off"
+                class="layui-input">
+        </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">数据库名</label>
+              <div class="layui-input-block">
+                <input type="text" name="dbName" required lay-verify="required" placeholder="请输入数据库名" autocomplete="off"
+                  class="layui-input">
+        </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">网盘地址</label>
+                <div class="layui-input-block">
+                  <input type="text" name="netDisk" required lay-verify="required" placeholder="请输入网盘地址" autocomplete="off"
+                    class="layui-input">
+        </div>
+                </div>
+
+                <div class="layui-form-item">
+                  <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                  </div>
+                </div>
+    </form>
+  </script>
+  <script type="text/html" id="personInfo">
+    <b><table class="layui-table">
+         <colgroup>
+             <col width="20%">
+             <col width="80%">
+         </colgroup>
+         <tbody>
+            
+                 <tr>
+                     <td><i class="layui-icon layui-icon-username"></i>开发者</td>
+                     <td><a href="https://gitee.com/markchen7788" style="color: green;">MarkChen</a></td>
+                 </tr>
+             
+             <tr>
+                 <td><i class="layui-icon layui-icon-time"></i>开发时间</td>
+                 <td>2021年3月-2021年6月</td>
+             </tr>
+             <tr>
+                 <td><i class="layui-icon layui-icon-star"></i>开发目的</td>
+                 <td>本科毕业设计</td>
+             </tr>
+             <tr>
+                 <td><i class="layui-icon layui-icon-form"></i>使用备注</td>
+                 <td>该系统是在毕设指导老师的指点下独立完成的,开发不易,使用时请帮助本人多多宣传,嘻嘻!任何问题都可以留言在本项目的<a
+                         href="https://gitee.com/markchen7788/GradualtionDesign" style="color: green;">Gitee仓库</a>,本人会不定时查看......</td>
+             </tr>
+         </tbody>
+     </table>
+  </b>
+  </script>
+  <script src='js/jquery.min.js'></script>
+  <script src="js/login.js"></script>
+  <script src="./js/adress.js"> </script>
+</body>
+
+</html>
