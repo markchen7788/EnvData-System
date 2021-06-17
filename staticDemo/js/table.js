@@ -18,45 +18,25 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 
 	var unit = {};
 	var count = 20, getCount = true;
-	var index = layer.load({ time: 10 * 1000 });
-	$.ajax({
-		url: 'testJsonData/getUnit.json',
-		type: 'post',
-		data: { "tableName": tableName },
-		success: function (res) {
-			res = res[tableName];
-			unit = res;
-			pri = res.TABLE_PRI;
-			delete res.TABLE_PRI;
-			renderThisPage(condition);
-		}
-		//…
-	});
+	var res = getUnit;
+	res = res[tableName];
+	unit = res;
+	pri = res.TABLE_PRI;
+	delete res.TABLE_PRI;
+	renderThisPage(condition);
 
 
 	function renderThisPage(json) {
 		if (getCount) json['count'] = true;
-		//var load = layer.load(2, { time: 10 * 1000 });
-		$.ajax({
-			url: 'testJsonData/' + json.tableName + '.json',
-			type: 'post',
-			data: JSON.stringify(json),
-			dataType: "json",
-			contentType: "application/json",
-			async: false,
-			success: function (res) {
-				//console.log(res)
-				if (getCount) {
-					count = res[0];
-					res.splice(0, 1);
-					getCount = !getCount;
-					delete condition.count;
-				}
-				data1 = res;
-				layer.close(index);
-			}
-			//…
-		});
+		var res = tableData[json.tableName];
+		if (getCount) {
+			count = res[0];
+			res.splice(0, 1);
+			getCount = !getCount;
+			delete condition.count;
+		}
+		data1 = res;
+
 		var col = [[{ type: 'checkbox', fixed: 'left' }, { field: 'Id', title: 'Id', sort: true }]], edi = { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 };
 		//col:存放数据表格的表头
 		colList = [];//存放所有元素名
@@ -112,7 +92,8 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 		return false;
 	});
 	form.on('submit(saveOrder)', function (data) {
-		layer.msg("后端排序SQL:select * from "+getQueryVariable("tableName")+" order by "+data.field.orderBy + " " + data.field.orderOption);
+		condition.order=data.field.orderBy+"&&"+data.field.orderOption;
+		layer.msg("后端排序SQL:select * from " + getQueryVariable("tableName") + " order by " + data.field.orderBy + " " + data.field.orderOption);
 		return false;
 	});
 
@@ -130,19 +111,7 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'form', 'laypage'], function 
 				document.getElementById('upload').click();
 				break;
 			case 'export':
-				$.ajax({
-					url: 'testJsonData/' + condition.tableName + '.json',
-					type: 'post',
-					data: JSON.stringify({ "tableName": condition.tableName, "condition": condition.condition }),
-					dataType: "json",
-					contentType: "application/json",
-					async: false,
-					success: function (res) {
-						exportToExcel(res);
-					}
-					//…
-				});
-
+				exportToExcel(tableData[getQueryVariable("tableName")]);
 				break;
 			case 'deleteTable':
 				layer.open({

@@ -1,3 +1,31 @@
+//////////测试数据
+var site = [
+	{
+		"Id": "202104220001",
+		"siteName": "宝鸡小陈监测站",
+		"area": "陕西省-宝鸡市-渭滨区",
+		"comment": "宝鸡小陈监测站最棒了！！！是不是？"
+	},
+	{
+		"Id": "202104220002",
+		"siteName": "西安小秦监测站",
+		"area": "陕西省-西安市-未央区",
+		"comment": "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
+	},
+	{
+		"Id": "202104220004",
+		"siteName": "铜川耀州区小秦监测站",
+		"area": "陕西省-铜川市-耀州区",
+		"comment": "哈哈哈哈"
+	},
+	{
+		"Id": "202104220100",
+		"siteName": "未央第二监测站",
+		"area": "陕西省-西安市-未央区",
+		"comment": "陕西省-西安市-未央区2站"
+	}
+];
+////////////////////////////////
 var currentSize = 2, size = [2, 3, 4, 6, 12], now = [];
 var result = [];
 var curArea = [];
@@ -33,47 +61,39 @@ layui.use(['element', 'table', 'jquery', 'laytpl', 'laypage'], function () {
 
 	//////////////////////////
 	function updateCurrentPage(condition) {
-		$.ajax({
-			url: 'testJsonData/site.json',
-			type: 'post',
-			data: JSON.stringify(condition),
-			dataType: "json",
-			contentType: "application/json",
-			async: false,
-			success: function (res) {
-				//console.log(res);
-				result = [];
-				for (var i in res) if (res[i].area.indexOf(condition.condition) != -1) result.push(res[i]);
-				console.log(result);
-				layer.close(index);
-				laypage.render({
-					elem: 'test2' //注意，这里的 test1 是 ID，不用加 # 号
-					, count: result.length //数据总数，从服务端得到
-					, limit: lim
-					, limits: [1, 2, 5, 10, 15, 25, 50]
-					, first: '首页'
-					, last: '尾页'
-					, prev: '上一页'
-					, next: '下一页'
-					, theme: 'mark'
-					, layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-					, jump: function (obj, first) {
-						//obj包含了当前分页的所有参数，比如：
-						// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-						// console.log(obj.limit); //得到每页显示的条数
+		var res = site;
+		//console.log(res);
+		result = [];
+		for (var i in res) if (res[i].area.indexOf(condition.condition) != -1) result.push(res[i]);
+		console.log(result);
+		layer.close(index);
+		laypage.render({
+			elem: 'test2' //注意，这里的 test1 是 ID，不用加 # 号
+			, count: result.length //数据总数，从服务端得到
+			, limit: lim
+			, limits: [1, 2, 5, 10, 15, 25, 50]
+			, first: '首页'
+			, last: '尾页'
+			, prev: '上一页'
+			, next: '下一页'
+			, theme: 'mark'
+			, layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+			, jump: function (obj, first) {
+				//obj包含了当前分页的所有参数，比如：
+				// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+				// console.log(obj.limit); //得到每页显示的条数
 
-						//首次不执行
-						if (!first) {
-							//do something
-							changePage(obj.curr, obj.limit, result);
-						}
-					}
-				});
-				//$('p').text(JSON.stringify(res))
-				changePage(1, lim, result);
-
+				//首次不执行
+				if (!first) {
+					//do something
+					changePage(obj.curr, obj.limit, result);
+				}
 			}
 		});
+		//$('p').text(JSON.stringify(res))
+		changePage(1, lim, result);
+
+
 	}
 	function changePage(_page, _limit, item) {
 		item = item.slice((_page - 1) * _limit, (_page - 1) * _limit + _limit);

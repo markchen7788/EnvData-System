@@ -1,3 +1,244 @@
+//////////测试数据
+var site = [
+	{
+		"Id": "202104220001",
+		"siteName": "宝鸡小陈监测站",
+		"area": "陕西省-宝鸡市-渭滨区",
+		"comment": "宝鸡小陈监测站最棒了！！！是不是？"
+	},
+	{
+		"Id": "202104220002",
+		"siteName": "西安小秦监测站",
+		"area": "陕西省-西安市-未央区",
+		"comment": "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
+	},
+	{
+		"Id": "202104220004",
+		"siteName": "铜川耀州区小秦监测站",
+		"area": "陕西省-铜川市-耀州区",
+		"comment": "哈哈哈哈"
+	},
+	{
+		"Id": "202104220100",
+		"siteName": "未央第二监测站",
+		"area": "陕西省-西安市-未央区",
+		"comment": "陕西省-西安市-未央区2站"
+	}
+];
+var elements = [
+	{
+		"Id": "195",
+		"elementName": "Sample ID",
+		"elementUnit": "",
+		"dataType": "VARCHAR(100)",
+		"elementMemo": "样本Id"
+	},
+	{
+		"Id": "197",
+		"elementName": "时间",
+		"elementUnit": "",
+		"dataType": "VARCHAR(100)",
+		"elementMemo": "时间"
+	},
+	{
+		"Id": "198",
+		"elementName": "SO₄²ˉ",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "硫酸根离子"
+	},
+	{
+		"Id": "199",
+		"elementName": "NO₃ˉ",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "硝酸根离子"
+	},
+	{
+		"Id": "200",
+		"elementName": "NH₄ˉ",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "氨离子"
+	},
+	{
+		"Id": "201",
+		"elementName": "Clˉ",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "氯离子"
+	},
+	{
+		"Id": "202",
+		"elementName": "BC",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "BC"
+	},
+	{
+		"Id": "203",
+		"elementName": "Metal",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "金属"
+	},
+	{
+		"Id": "204",
+		"elementName": "PM₂.₅",
+		"elementUnit": "μg/m3",
+		"dataType": "DOUBLE",
+		"elementMemo": "PM₂.₅微粒"
+	},
+	{
+		"Id": "206",
+		"elementName": "WIN_D",
+		"elementUnit": "",
+		"dataType": "DOUBLE",
+		"elementMemo": "风向"
+	},
+	{
+		"Id": "207",
+		"elementName": "WIN_S",
+		"elementUnit": "",
+		"dataType": "DOUBLE",
+		"elementMemo": "风速"
+	},
+	{
+		"Id": "208",
+		"elementName": "RHU",
+		"elementUnit": "%",
+		"dataType": "DOUBLE",
+		"elementMemo": "相对湿度"
+	},
+	{
+		"Id": "209",
+		"elementName": "TEM",
+		"elementUnit": "℃",
+		"dataType": "DOUBLE",
+		"elementMemo": "温度"
+	},
+	{
+		"Id": "210",
+		"elementName": "PRS",
+		"elementUnit": "Pa",
+		"dataType": "DOUBLE",
+		"elementMemo": "气压"
+	},
+	{
+		"Id": "211",
+		"elementName": "PM10",
+		"elementUnit": "μg/m3",
+		"dataType": "DOUBLE",
+		"elementMemo": "PM10微粒"
+	},
+	{
+		"Id": "212",
+		"elementName": "SO2",
+		"elementUnit": "μg/m3",
+		"dataType": "DOUBLE",
+		"elementMemo": "二氧化硫"
+	},
+	{
+		"Id": "213",
+		"elementName": "NO2",
+		"elementUnit": "μg/m3",
+		"dataType": "DOUBLE",
+		"elementMemo": "二氧化氮"
+	},
+	{
+		"Id": "214",
+		"elementName": "CO",
+		"elementUnit": "μg/m3",
+		"dataType": "DOUBLE",
+		"elementMemo": "一氧化碳"
+	},
+	{
+		"Id": "215",
+		"elementName": "O3",
+		"elementUnit": "μg/m3",
+		"dataType": "DOUBLE",
+		"elementMemo": "臭氧"
+	},
+	{
+		"Id": "216",
+		"elementName": "AQI",
+		"elementUnit": "",
+		"dataType": "DOUBLE",
+		"elementMemo": "空气质量指数，比值无单位"
+	},
+	{
+		"Id": "217",
+		"elementName": "Na+",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "钠离子"
+	},
+	{
+		"Id": "218",
+		"elementName": "K+",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "钾离子"
+	},
+	{
+		"Id": "219",
+		"elementName": "Mg2+",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "镁离子"
+	},
+	{
+		"Id": "220",
+		"elementName": "Ca2+",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "钙离子"
+	},
+	{
+		"Id": "221",
+		"elementName": "NO2-",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "亚硝酸根离子"
+	},
+	{
+		"Id": "222",
+		"elementName": "F-",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "氟离子"
+	},
+	{
+		"Id": "238",
+		"elementName": "TC",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "TC"
+	},
+	{
+		"Id": "239",
+		"elementName": "OC",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "OC"
+	},
+	{
+		"Id": "240",
+		"elementName": "EC",
+		"elementUnit": "ug/cm2",
+		"dataType": "DOUBLE",
+		"elementMemo": "EC"
+	},
+	{
+		"Id": "241",
+		"elementName": "11",
+		"elementUnit": "11",
+		"dataType": "11",
+		"elementMemo": "11"
+	}
+];
+/////////////////////////////////////
+
 var curTableName = "site", ele = [];
 layui.use(['element', 'table', 'jquery'], function () {
 	var element = layui.element;
@@ -11,35 +252,29 @@ layui.use(['element', 'table', 'jquery'], function () {
 	//updataForm("")
 	function updataForm(condition) {
 		if (curTableName == 'site') condition += "&&" + getQueryVariable("area");
-		var load = layer.load(2, { time: 10 * 1000 });
-		$.ajax({
-			url: "testJsonData/" + curTableName + ".json",
-			type: 'post',
-			data: JSON.stringify({ "tableName": curTableName, 'condition': condition }),
-			dataType: "json",
-			contentType: "application/json",
-			success: function (res) {
 
-				// console.log(res);
-				var data1 = res;
-				var col = [[{ type: 'checkbox', fixed: 'left' }]];
-				for (var key in data1[0]) {
-					if (key == 'Id') var item = { field: key, title: key, sort: true, hide: true };
-					else var item = { field: key, title: key, sort: true }
-					col[0].push(item)
-				}
 
-				table.render({
-					elem: '#test'
-					, data: data1
-					, cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-					, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-					, cols: col
-					, page: true
-				});
-				layer.close(load);
-			}
+		var res;
+		if (curTableName == "site") res = site;
+		else res = elements;
+		var data1 = res;
+		var col = [[{ type: 'checkbox', fixed: 'left' }]];
+		for (var key in data1[0]) {
+			if (key == 'Id') var item = { field: key, title: key, sort: true, hide: true };
+			else var item = { field: key, title: key, sort: true }
+			col[0].push(item)
+		}
+
+		table.render({
+			elem: '#test'
+			, data: data1
+			, cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+			, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+			, cols: col
+			, page: true
 		});
+
+
 	}
 
 	table.on('toolbar(test)', function (obj) {

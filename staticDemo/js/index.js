@@ -1,5 +1,12 @@
+//////////////测试数据
+var getConfig = { "netDisk": "https://markchen7788.github.io/a-simple-php-network-disk-/staticDemo/", "hostName": "localhost:3308", "dbName": "envdata", "userName": "root", "pwd": "123456" };
+var getUser = { "userName": "admin", "pwd": "admin", "area": "陕西省" };
+var getArea = [{ "area": "陕西省-宝鸡市-渭滨区" }, { "area": "陕西省-西安市-未央区" }, { "area": "陕西省-铜川市-耀州区" }];
+
+////////////////////////////
 var user = {};
 var tableOrStation = "./searchTable.html";
+
 RandomBg();
 //document.getElementById("layuiBody").style.height=document.body.style.height-44;
 layui.use(['element', 'jquery', 'form'], function () {
@@ -8,31 +15,23 @@ layui.use(['element', 'jquery', 'form'], function () {
 	const $ = layui.jquery;
 	var laytpl = layui.laytpl;
 	$("#timeNow").html(new Date() + "&nbsp;&nbsp;&nbsp;");
-	$.ajax({
-		url: 'testJsonData/getUser.json',
-		type: 'POST',
-		async: false,
-		success: function (res) {
-			user = res;
-			$("#userName").html('<img src="../code/Mark/src/main/resources/static/res/profile.jpeg" class="layui-nav-img">' + res.userName);
-			changeWindow(res.area, 0);//一进入首页就显示所有能够查看到的表格
-			renderSideNav(res.area, "col");
-			if (res.userName == 'admin') $("#settings").html('<dd><a href="javascript:settings()"><i class="layui-icon layui-icon-set"></i>&nbsp;系统设置</a></dd>');
-		}
-		//…
-	});
-	$.ajax({
-		url: 'testJsonData/getConfig.json',
-		type: 'get',
-		success: function (res) {
-			$("#netDisk").attr("href", res.netDisk);
-		}
-		//…
-	});
+
+	var res = getUser;
+	user = res;
+	$("#userName").html('<img src="../code/Mark/src/main/resources/static/res/profile.jpeg" class="layui-nav-img">' + res.userName);
+	changeWindow(res.area, 0);//一进入首页就显示所有能够查看到的表格
+	renderSideNav(res.area, "col");
+	if (res.userName == 'admin') $("#settings").html('<dd><a href="javascript:settings()"><i class="layui-icon layui-icon-set"></i>&nbsp;系统设置</a></dd>');
+
+
+	res = getConfig;
+	$("#netDisk").attr("href", res.netDisk);
+
 
 
 	form.on('submit(formDemo)', function (data) {
 		layer.msg(JSON.stringify(data.field));
+		$("#netDisk").attr("href",data.field.netDisk);
 		return false;
 	});
 
@@ -46,37 +45,31 @@ function renderSideNav(area, tableName) {
 		var form = layui.form;
 		const $ = layui.jquery;
 		var laytpl = layui.laytpl;
-		$.ajax({
-			url: 'testJsonData/getArea.json',
-			data: { "area": area, "tableName": tableName },
-			type: 'get',
-			success: function (res) {
-				// console.log(res);
-				var treeItem = {};
-				for (var i in res) {
-					var _res = res[i].area.split("-");
-					if (!treeItem.hasOwnProperty(_res[0]))
-						treeItem[_res[0]] = {};
-					if (!treeItem[_res[0]].hasOwnProperty(_res[1]))
-						treeItem[_res[0]][_res[1]] = {};
-					if (!treeItem[_res[0]][_res[1]].hasOwnProperty(_res[2]))
-						treeItem[_res[0]][_res[1]][_res[2]] = res[i].area;
 
-				}
-				// layer.msg(JSON.stringify(treeItem));
-				var getTpl = $("#navDemo").html();
-				laytpl(getTpl).render(treeItem, function (html) {
-					// document.getElementById('allTable').innerHTML= html;
-					$("#myNav").html(html);
-					element.render('nav');
+		var res = getArea;
+		var treeItem = {};
+		for (var i in res) {
+			var _res = res[i].area.split("-");
+			if (!treeItem.hasOwnProperty(_res[0]))
+				treeItem[_res[0]] = {};
+			if (!treeItem[_res[0]].hasOwnProperty(_res[1]))
+				treeItem[_res[0]][_res[1]] = {};
+			if (!treeItem[_res[0]][_res[1]].hasOwnProperty(_res[2]))
+				treeItem[_res[0]][_res[1]][_res[2]] = res[i].area;
 
-				});
+		}
+		// layer.msg(JSON.stringify(treeItem));
+		var getTpl = $("#navDemo").html();
+		laytpl(getTpl).render(treeItem, function (html) {
+			// document.getElementById('allTable').innerHTML= html;
+			$("#myNav").html(html);
+			element.render('nav');
 
-				//if (res.length > 0) changeWindow("searchTable.html?area=" + res[0].area,0);//一进入首页就显示第一个行政区能够查看到的表格
-
-			}
-			//…
 		});
+
+		//if (res.length > 0) changeWindow("searchTable.html?area=" + res[0].area,0);//一进入首页就显示第一个行政区能够查看到的表格
+
+
 	});
 }
 
@@ -253,15 +246,7 @@ function settings() {
 	layui.use(['form', 'jquery', 'layer'], function () {
 		var form = layui.form;
 		const $ = layui.jquery;
-		var res;
-		$.ajax({
-			url: 'testJsonData/getConfig.json',
-			type: 'get',
-			async: false,
-			success: function (data) {
-				res = data;
-			}
-		});
+		var res = getConfig;
 		layer.open({
 			type: 1,
 			title: '请配置系统数据库和云盘地址',
