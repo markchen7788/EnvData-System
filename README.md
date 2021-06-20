@@ -32,13 +32,13 @@
     * 主系统直接部署:
         * 先配置MySQL数据库，步骤可参看数据库配置文件夹下的说明文件；
         * 配置JVM（本人JDK版本1.8）
-        * 打开控制台，切换到[Mark-0.0.1-SNAPSHOT.jar](./Mark-0.0.1-SNAPSHOT.jar)的路径下，输入“java -jar  Mark-0.0.1-SNAPSHOT.jar”即可运行程序。在服务器运行可以加上nohup命令把程序挂到后台。
+        * 打开控制台，切换到[Mark-0.0.1-SNAPSHOT.jar](https://gitee.com/markchen7788/GradualtionDesign/blob/master/deployable%20Jar%20&%20php%20source%20code/Mark-0.0.1-SNAPSHOT.jar)的路径下，输入“java -jar  Mark-0.0.1-SNAPSHOT.jar”即可运行程序。在服务器运行可以加上nohup命令把程序挂到后台。
         * 程序默认端口：8889 （可以用解压软件修改jar包中的application.yml文件内容来修改端口）
         * 初次运行程序进入登陆界面会提示配置数据库连接和网盘地址，配置完成后即可正常使用本系统。
 
     * 网盘子系统部署：
         * 配置php环境（本人php7+nginx)
-        * 把[fileManager.zip](.)解压到网站根目录即可；
+        * 把[fileManager.zip](https://gitee.com/markchen7788/GradualtionDesign/blob/master/deployable%20Jar%20&%20php%20source%20code/fileManager.zip)解压到网站根目录即可；
         * 无需配置数据库，开箱即用
 3.  源码运行
     * 主系统源码可用IDEA直接打开，记得先配置数据库
